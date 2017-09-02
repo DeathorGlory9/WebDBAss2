@@ -27,13 +27,15 @@ Route::get('faq', function () {
 	return view('pages/faq');
 });
 
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('submitticket', 'TicketController@create');
+});
+
 Route::get('/logout', 'HomeController@logout');
 
 Route::get('viewticket', 'TicketController@showall');
 
 Route::get('viewticket/{id}', 'TicketController@show')->name('pages.viewticket');;
-
-Route::get('submitticket', 'TicketController@create');
 
 Route::get('its', 'TicketController@getAll');
 
