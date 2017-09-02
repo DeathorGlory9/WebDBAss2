@@ -1,0 +1,33 @@
+#logo
+{
+	float: left;
+}
+
+#login, #register
+{
+	float:right;
+	color: #ee3324;
+	min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+	min-height: 90px; /* These two lines are counted as one :-)       */
+
+	display: flex;
+	align-items: center;
+
+	margin-left: 10px;
+}
+
+.nav-container
+{
+	background-color: #333;
+}
+
+nav li
+{
+	text-align: center;
+	font-size: 18px;
+}
+
+nav li a
+{
+	color: #ffffff !important;
+}

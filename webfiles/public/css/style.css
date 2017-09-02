@@ -1,0 +1,48 @@
+html, body, .body-content {
+  min-height: 100vh;
+  height: 100%;
+}
+
+#header-container, #footer-container{
+	flex: 0 1 auto;
+}
+
+#main-container
+{
+	flex: 1 1 auto;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+
+
+.content-container
+{
+	width: 80%;
+  	margin: 0 auto;
+}
+
+.content-container-small
+{
+	width: 60%;
+  	margin: 0 auto;
+}
+
+.body-content{
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+}
+
+
+#footer
+{
+	background-color: #333;
+	height: 45px;
+}
+
+.page-header
+{
+	margin: 0px;
+	border-bottom: none;
+	color: #ee3324;
+}
