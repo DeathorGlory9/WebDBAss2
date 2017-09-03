@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use Auth;
 
 use App\Comment;
 use Illuminate\Http\Request;
 use App\Ticket;
-use App\User;
 use DB;
 
 class TicketController extends Controller
@@ -19,18 +19,13 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'firstName' => 'required|max:50',
-			'lastName' => 'required|max:50',
-			'email' => 'required|email|max:100',
             'issueTitle' => 'required|max:75',
             'os' => 'required|max:50',
             'description' => 'required',
         ]);
 
-		$user = User::create($request->all());
-
 		$ticket = [
-			'userid' => $user->id,
+			'userid' => Auth::id(),
 			'issueTitle' => $request->issueTitle,
 			'os' => $request->os,
 			'description' => $request->description,];
