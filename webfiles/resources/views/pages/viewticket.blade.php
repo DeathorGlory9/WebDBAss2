@@ -49,22 +49,11 @@
 							{{$comment->comment}}
 						</div>
 					@endforeach
-				</div>
-			</div>
-			<div class="row make-comment">
-				<div class="col-md-12">
-					{{ Form::open(['route' => 'create_comment', 'enctype' => 'multipart/form-data']) }}
-						<div style="display:none;">{!! Form::text('ticketid', $ticket->id,
-							array('value'=>'$ticket->id')) !!}</div>
-						{!! Form::textarea('comment', null,
-							array('required',
-								  'placeholder'=>'Comment')) !!}
-						  {!! Form::text('author', null,
-								array('required',
-									  'placeholder'=>'Author')) !!}
-
-						<input type="submit" id="btnSubmitComment" name="btnSubmitComment" value="Make Comment">
-					</form>
+					@if($comments->isEmpty())
+						<div>
+							No comments
+						</div>
+					@endif
 				</div>
 			</div>
 		</div>
