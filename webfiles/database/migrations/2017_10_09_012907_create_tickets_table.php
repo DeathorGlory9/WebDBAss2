@@ -20,6 +20,8 @@ class CreateTicketsTable extends Migration
 			$table->string('os');
 			$table->string('description');
 			$table->string('status')->default("pending");
+			$table->string('priority')->default("low");
+			$table->integer('escalation')->default(3);
 			$table->datetime('updated_at');
 			$table->datetime('created_at');
         });
