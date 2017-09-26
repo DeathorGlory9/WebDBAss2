@@ -63,16 +63,6 @@ class TicketController extends Controller
         return redirect()->route('pages.viewticket', [$request->ticketid]);
     }
 
-	public function updateTicketStatus(Request $request)
-	{
-
-		$ticket = DB::table('tickets')->where('id', $request->ticketid)->update(array('status' => $request->status));
-
-		$tickets = DB::table('tickets')->get();
-
-        return view('pages.its', ['tickets' => $tickets]);
-	}
-
     // Api functions
     // Get all tickets
     public function getAllTickets()
@@ -81,4 +71,28 @@ class TicketController extends Controller
 
 		return $tickets;
     }
+
+    // Update a tickts status
+    public function updateTicketStatus(Request $request, $id, $status)
+	{
+		$ticket = DB::table('tickets')->where('id', $id)->update(array('status' => $status));
+
+        return "Update successful";
+	}
+
+    // Update a tickts priority
+    public function updateTicketPriority(Request $request, $id, $priority)
+	{
+		$ticket = DB::table('tickets')->where('id', $id)->update(array('priority' => $priority));
+
+        return "Update successful";
+	}
+
+    // Update a tickts escalation
+    public function updateTicketEscalation(Request $request, $id, $escalation)
+	{
+		$ticket = DB::table('tickets')->where('id', $id)->update(array('escalation' => $escalation));
+
+        return "Update successful";
+	}
 }

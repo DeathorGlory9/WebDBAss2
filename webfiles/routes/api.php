@@ -22,4 +22,10 @@ Route::group(['middleware' => 'cors'], function () {
     //Ticket api
     //Get all ticket data
     Route::get('tickets/returnAll','TicketController@getAllTickets');
+    //Update ticket status
+    Route::get('tickets/statusupdate/{id}/{status}','TicketController@updateTicketStatus');
+    //Update ticket priority
+    Route::get('tickets/statusupdate/{id}/{priority}','TicketController@updateTicketPriority');
+    //Update ticket escalation
+    Route::get('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
 });
