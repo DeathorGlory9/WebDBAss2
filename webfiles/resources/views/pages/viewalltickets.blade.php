@@ -13,7 +13,7 @@
 							<td>{{$ticket->issueTitle}}</td>
 							<td>{{$ticket->status}}</td>
 							<td>{{$ticket->os}}</td>
-							<td><a href="/WebDBAss1/webfiles/public/viewticket/{{$ticket->id}}">View ticket</a></td>
+							<td><a href="/WebDBAss2/webfiles/public/viewticket/{{$ticket->id}}">View ticket</a></td>
 						</tr>
 					@endforeach
 				</table>

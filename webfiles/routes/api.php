@@ -16,3 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//React api methods
+Route::group(['middleware' => 'cors'], function () {
+    //Ticket api
+    //Get all ticket data
+    Route::get('tickets/returnAll','TicketController@getAllTickets');
+});

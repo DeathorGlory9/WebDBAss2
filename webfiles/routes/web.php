@@ -33,11 +33,9 @@ Route::group(['middleware' => ['auth']], function() {
 
 Route::get('/logout', 'HomeController@logout');
 
-Route::get('viewticket', 'TicketController@showall');
+Route::get('viewticket', 'TicketController@showAllTickets');
 
-Route::get('viewticket/{id}', 'TicketController@show')->name('pages.viewticket');;
-
-Route::get('its', 'TicketController@getAll');
+Route::get('viewticket/{id}', 'TicketController@viewTicket')->name('pages.viewticket');;
 
 Route::resource('tickets', 'TicketController');
 

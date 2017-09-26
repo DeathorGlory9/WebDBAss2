@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Auth;
-
+use Exception;
 use App\Comment;
 use Illuminate\Http\Request;
 use App\Ticket;
@@ -35,7 +35,7 @@ class TicketController extends Controller
 		return redirect()->route('pages.viewticket', [$ticket->id]);
     }
 
-	public function show($id)
+    public function viewTicket($id)
     {
 		$ticket = DB::table('tickets')->where('id', $id)->first();
 		$user = DB::table('users')->where('id', $ticket->userid)->first();
@@ -44,18 +44,11 @@ class TicketController extends Controller
 		return view('pages.viewticket', ['ticket' => $ticket,'user' => $user,'comments' => $comments] ) ;
     }
 
-	public function showall()
+	public function showAllTickets()
     {
 		$tickets = DB::table('tickets')->get();
 
 		return view('pages.viewalltickets', ['tickets' => $tickets] ) ;
-    }
-
-    public function getAll()
-    {
-        $tickets = DB::table('tickets')->get();
-
-        return view('pages.its', ['tickets' => $tickets]);
     }
 
     public function storeComment(Request $request)
@@ -79,4 +72,13 @@ class TicketController extends Controller
 
         return view('pages.its', ['tickets' => $tickets]);
 	}
+
+    // Api functions
+    // Get all tickets
+    public function getAllTickets()
+    {
+		$tickets = DB::table('tickets')->get();
+
+		return $tickets;
+    }
 }
