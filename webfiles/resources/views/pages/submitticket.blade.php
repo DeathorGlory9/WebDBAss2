@@ -31,9 +31,11 @@
 				</div>
 				<div class="row">
 					<div class="col col-md-12">
-						{!! Form::text('os', null,
-					        array('required',
-					              'placeholder'=>'Your Operating system')) !!}
+						{!! Form::select('os',
+						array(	'placeholder' => 'OS',
+								'Windows' => 'Windows',
+								'Mac' => 'Mac',
+								'Linux' => 'Linux')) !!}
 					</div>
 				</div>
 			</div>

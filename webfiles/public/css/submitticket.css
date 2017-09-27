@@ -33,6 +33,13 @@
 	border-width: 1px;
 }
 
+.submit-ticket-container select
+{
+	height: 35px;
+	padding: 5px;
+	width: 100%;
+}
+
 #btnSubmit
 {
 	background-color: #ee3324;
