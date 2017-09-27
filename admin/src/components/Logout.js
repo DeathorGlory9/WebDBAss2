@@ -8,7 +8,7 @@ export default class Home extends React.Component
 	componentWillMount()
 	{
 		firebase.auth().signOut()
-		localStorage.removeItem(appTokenKey);
+		localStorage.removeItem('User');
 		this.props.history.push("/");
 		return;
 	}

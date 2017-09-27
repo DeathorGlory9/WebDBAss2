@@ -1,68 +1,8 @@
 import React from "react";
 import {Card, CardActions, CardHeader, FontIcon, RaisedButton} from "material-ui";
-import {loginWithGoogle} from "../helpers/Auth";
-import {firebaseAuth} from "../config/constants";
+import { Route, Redirect } from 'react-router';
+import {fb} from "../config/constants";
 
-
-const firebaseAuthKey = "firebaseAuthInProgress";
-const appTokenKey = "appToken";
-
-export default class Login extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            splashScreen: false
-        };
-
-        this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
-    }
-
-    handleGoogleLogin() {
-        loginWithGoogle()
-            .catch(function (error) {
-                alert(error); // or show toast
-                localStorage.removeItem(firebaseAuthKey);
-            });
-        localStorage.setItem(firebaseAuthKey, "1");
-    }
-
-    componentWillMount() {
-        /**
-         * We have appToken relevant for our backend API
-         */
-        if (localStorage.getItem(appTokenKey)) {
-            this.props.history.push("/");
-            return;
-        }
-
-        firebaseAuth().onAuthStateChanged(user => {
-            if (user) {
-                console.log("User signed in: ", JSON.stringify(user));
-
-                localStorage.removeItem(firebaseAuthKey);
-
-                // here you could authenticate with you web server to get the
-                // application specific token so that you do not have to
-                // authenticate with firebase every time a user logs in
-                localStorage.setItem(appTokenKey, user.uid);
-
-                // store the token
-                this.props.history.push("/")
-            }
-        });
-    }
-
-    render() {
-        console.log(firebaseAuthKey + "=" + localStorage.getItem(firebaseAuthKey));
-        if (localStorage.getItem(firebaseAuthKey) === "1") return <SplashScreen />;
-        return <LoginPage handleGoogleLogin={this.handleGoogleLogin}/>;
-    }
-}
-
-const iconStyles = {
-    color: "#ffffff"
-};
 const cardStyles = {
   card : {
       width: "25%",
@@ -72,21 +12,88 @@ const cardStyles = {
     header: {
         margin:"auto"
     }
-};
-const LoginPage = ({handleGoogleLogin}) => (
-    <div>
-        <Card style={cardStyles.card}>
-        <CardHeader style={cardStyles.header} title="Login" />
-		  <CardActions>
-			   <RaisedButton
-					 label="Sign in with Google"
-					 labelColor={"#ffffff"}
-					 backgroundColor="#dd4b39"
-					 icon={<FontIcon className="fa fa-google-plus" style={iconStyles}/>}
-					 onClick={handleGoogleLogin}
-			   />
-          </CardActions>
-        </Card>
-    </div>
-);
-const SplashScreen = () => (<p>Loading...</p>)
+}
+
+class Login extends React.Component {
+    state = {
+        type: null,
+        user: null
+    }
+
+    componentWillMount () {
+        fb.auth().onAuthStateChanged(this.handleCredentials);
+    }
+
+    componentWillUnmount() {
+        if(this.state.user !== null) {
+            localStorage.setItem('type', this.state.type);
+        }
+    }
+
+    handleClick = (type) => {
+        const provider = new fb.auth.GoogleAuthProvider();
+        fb.auth().signInWithPopup(provider)
+            .then((success) => { this.handleCredentials(success.user) })
+            .then(() => { this.handleLogin(type) });
+    }
+
+    handleCredentials = (params) => {
+        console.log(params);
+        this.setState({
+            user: params,
+            type: localStorage.getItem('type')
+        });
+    }
+
+    handleLogin = (type) => {
+        localStorage.setItem('type', type);
+        this.setState({
+            type: type
+        });
+
+        /* Add user to our mongodb database */
+        /* MongoDB schema - will insert the user's details into the database */
+        const user = {};
+        user['user/' + this.state.user.uid] = {
+            type: type,
+            name: this.state.user.displayName,
+            id: this.state.user.uid
+        };
+        fb.database().ref().update(user)
+        localStorage.setItem('User',type)
+    }
+
+    handleSignout = () => {
+        const vm = this;
+        vm.setState({
+            user: null,
+            type: null
+        });
+        localStorage.setItem('type', null);
+        fb.auth().signOut().then(function () {
+            alert('You have been signed out');
+        });
+    }
+
+    render()
+    {
+        return(
+            <Route exact path="/login" render={() => (
+                this.state.user === null ? (
+                <Card style={cardStyles.card}>
+                    <CardHeader style={cardStyles.header} title="Login" />
+                    <CardActions>
+                        <RaisedButton style={{marginRight:10}} onClick={() => this.handleClick('helpdesk')}>Helpdesk User</RaisedButton>
+                        <RaisedButton onClick={() => this.handleClick('tech')}>Tech User</RaisedButton>
+                    </CardActions>
+                </Card>
+                )
+                : (
+                    <Redirect to="/" />
+                )
+            )} />
+        );
+    }
+}
+
+export default Login;
