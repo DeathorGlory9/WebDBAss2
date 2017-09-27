@@ -1,5 +1,5 @@
 import React from "react";
-import {FontIcon, RaisedButton} from "material-ui";
+import {Card, CardActions, CardHeader, FontIcon, RaisedButton} from "material-ui";
 import {loginWithGoogle} from "../helpers/Auth";
 import {firebaseAuth} from "../config/constants";
 
@@ -63,10 +63,21 @@ export default class Login extends React.Component {
 const iconStyles = {
     color: "#ffffff"
 };
+const cardStyles = {
+  card : {
+      width: "25%",
+    margin: "auto",
+      marginTop: 50,
+  },
+    header: {
+        margin:"auto"
+    }
+};
 const LoginPage = ({handleGoogleLogin}) => (
     <div>
-        <h1>Login</h1>
-		  <div>
+        <Card style={cardStyles.card}>
+        <CardHeader style={cardStyles.header} title="Login" />
+		  <CardActions>
 			   <RaisedButton
 					 label="Sign in with Google"
 					 labelColor={"#ffffff"}
@@ -74,7 +85,8 @@ const LoginPage = ({handleGoogleLogin}) => (
 					 icon={<FontIcon className="fa fa-google-plus" style={iconStyles}/>}
 					 onClick={handleGoogleLogin}
 			   />
-		  </div>
+          </CardActions>
+        </Card>
     </div>
 );
 const SplashScreen = () => (<p>Loading...</p>)
