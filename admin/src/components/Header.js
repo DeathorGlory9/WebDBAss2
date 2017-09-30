@@ -11,15 +11,6 @@ export default class Header extends React.Component
 	}
 }
 
-const RightMenuButtons = () => (
-	<div>
-		<FlatButton href='/' label="Home"/>
-		<FlatButton href='/Login' label="View All Tickets"/>
-		<FlatButton href='/Login' label="View Ticket"/>
-		<FlatButton href='/logout' label="Logout"/>
-	</div>
-);
-
 // The Header creates links that can be used to navigate
 // between routes.
 const HeaderSection = () => (
@@ -28,4 +19,13 @@ const HeaderSection = () => (
 		title="Helpdesk Portal"
 		iconElementRight={<RightMenuButtons/>}/>
 	</header>
+);
+
+const RightMenuButtons = () => (
+	<div>
+		<FlatButton href='/' label="Home"/>
+		<FlatButton href='/viewAllTickets' label="View All Tickets"/>
+		<FlatButton href='/ticket/{id}' label="View Ticket"/>
+		<FlatButton href='/logout' label="Logout"/>
+	</div>
 );

@@ -72,7 +72,7 @@ class TicketController extends Controller
 		return $tickets;
     }
 
-    // Update a tickts status
+    // Update a tickets status
     public function updateTicketStatus(Request $request, $id, $status)
 	{
 		$ticket = DB::table('tickets')->where('id', $id)->update(array('status' => $status));
