@@ -72,6 +72,13 @@ class TicketController extends Controller
 		return $tickets;
     }
 
+	 public function getTicket(Request $request, $id)
+    {
+		$tickets = DB::table('tickets')->where('id', $id)->get();
+
+		return $tickets;
+    }
+
     // Update a tickets status
     public function updateTicketStatus(Request $request, $id, $status)
 	{
