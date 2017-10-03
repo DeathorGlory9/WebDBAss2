@@ -30,4 +30,6 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('tickets/statusupdate/{id}/{priority}','TicketController@updateTicketPriority');
     //Update ticket escalation
     Route::get('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
+	 //Add comment to ticket
+	 Route::get('comments/add/{id}/{comment}/{author}','TicketController@addComment');
 });

@@ -44,24 +44,24 @@ class TicketController extends Controller
 		return view('pages.viewticket', ['ticket' => $ticket,'user' => $user,'comments' => $comments] ) ;
     }
 
-	public function showAllTickets()
-    {
+	 public function showAllTickets()
+	{
 		$tickets = DB::table('tickets')->get();
 
 		return view('pages.viewalltickets', ['tickets' => $tickets] ) ;
-    }
+	}
 
     public function storeComment(Request $request)
 	{
-        $this->validate($request, [
-            'comment' => 'required|max:250',
-            'author' => 'required|max:50'
-        ]);
+	     $this->validate($request, [
+	         'comment' => 'required|max:250',
+	         'author' => 'required|max:50'
+	     ]);
 
-        Comment::create($request->all());
+	     Comment::create($request->all());
 
-        return redirect()->route('pages.viewticket', [$request->ticketid]);
-    }
+	     return redirect()->route('pages.viewticket', [$request->ticketid]);
+	 }
 
     // Api functions
     // Get all tickets
@@ -101,5 +101,19 @@ class TicketController extends Controller
 		$ticket = DB::table('tickets')->where('id', $id)->update(array('escalation' => $escalation));
 
         return "Update successful";
+	}
+
+	//Add a comment to a ticket
+	public function addComment(Request $request, $id, $comment, $author)
+  {
+		 $comment = [
+			 'ticketid' => 1,
+			  'comment' => $comment,
+			  'author' => $author
+		 ];
+
+		 Comment::create($comment);
+
+		 return "Comment added";
 	}
 }
