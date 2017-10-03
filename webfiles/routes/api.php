@@ -32,4 +32,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
 	 //Add comment to ticket
 	 Route::get('comments/add/{id}/{comment}/{author}','TicketController@addComment');
+	 //get all tickets assigned to the user
+	 Route::get('comments/getAllTicketsAssigned/{userId}','TicketController@getAllTicketsAssigned');
+	 //assign a ticket to a user
+	 Route::get('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
 });

@@ -72,6 +72,15 @@ class TicketController extends Controller
 		return $tickets;
     }
 
+	 // Get all tickts that are assigned to a specific help desk user
+	 public function getAllTicketsAssigned(Request $request, $userId)
+    {
+		$tickets = DB::table('tickets')->where('assignedto', $userId)->get();
+
+		return $tickets;
+    }
+
+
 	 public function getTicket(Request $request, $id)
     {
 		$tickets = DB::table('tickets')->where('id', $id)->get();
@@ -101,6 +110,13 @@ class TicketController extends Controller
 		$ticket = DB::table('tickets')->where('id', $id)->update(array('escalation' => $escalation));
 
         return "Update successful";
+	}
+
+	public function assignTicket(Request $request, $ticketId, $userId)
+	{
+		$ticket = DB::table('tickets')->where('id', $ticketId)->update(array('assignedto' => $userId));
+
+        return "Ticket assigned";
 	}
 
 	//Add a comment to a ticket

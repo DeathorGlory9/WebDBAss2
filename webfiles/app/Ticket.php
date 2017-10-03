@@ -10,7 +10,7 @@ class Ticket extends Model {
     use Notifiable;
 
     protected $fillable = [
-        'userid','issueTitle', 'os', 'description','status','priority','escalation'
+        'userid','issueTitle', 'os', 'description','status','priority','escalation', 'assignedto'
     ];
 
 }
