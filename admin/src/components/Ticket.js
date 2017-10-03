@@ -46,7 +46,7 @@ const TicketCard = () => (
                 floatingLabelText="Floating Label Text"
             />
             <br/>
-            
+
         </CardText>
         <CardActions>
 
