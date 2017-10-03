@@ -5,32 +5,24 @@ import {TicketTable} from './TicketTable';
 
 const appTokenKey = "appToken";
 
-
-const tableData = [
-    {
-        id: 'UID1',
-        issueTitle: 'Fire',
-		os: 'iOS',
-		description: 'My computer is on fire. Please send help.',
-        status: 'Pending',
-		priority: '1',
-		escalation: '1',
-		assignedTo: 'Bob'
-
-    },
-    {
-        id: 'UID2',
-        issueTitle: 'Computer is blank',
-        os: 'iOS',
-        description: 'Do i need the cable to be plugged in?',
-        status: 'Pending',
-        priority: '1',
-        escalation: '1',
-        assignedTo: 'Bob'
-    }];
-
 export default class Home extends React.Component
 {
+	state = {
+		tableData: []
+	};
+
+	setTableData()
+	{
+		var temp = [];
+		fetch('http://localhost/WebDBAss2/webfiles/public/api/tickets/returnAll')
+		.then(response => response.json())
+      .then(json => {
+			this.setState({
+				tableData: json
+			});
+		})
+	}
+
 	componentWillMount()
 	{
 		if (!localStorage.getItem('User'))
@@ -38,10 +30,42 @@ export default class Home extends React.Component
 			this.props.history.push("/login");
 			return;
 		}
+		this.setTableData();
 	}
 
 	render()
 	{
-		return <TicketTable/>;
+		return (
+			<div>
+          <RaisedButton label="Assign"/>
+          <RaisedButton label="Delete"/>
+
+          <Table>
+              <TableHeader>
+                  <TableRow>
+                      <TableHeaderColumn>ID</TableHeaderColumn>
+                      <TableHeaderColumn>Issue Title</TableHeaderColumn>
+                      <TableHeaderColumn>Operating System</TableHeaderColumn>
+                      <TableHeaderColumn>Description</TableHeaderColumn>
+                      <TableHeaderColumn>Status</TableHeaderColumn>
+                      <TableHeaderColumn>Priority</TableHeaderColumn>
+                      <TableHeaderColumn>Escalation</TableHeaderColumn>
+                      <TableHeaderColumn>Assigned To</TableHeaderColumn>
+                  </TableRow>
+              </TableHeader>
+              <TableBody>
+                  {this.state.tableData.map((row, index) => (<TableRow key={index}>
+                      <TableRowColumn>{row.id}</TableRowColumn>
+                      <TableRowColumn>{row.issueTitle}</TableRowColumn>
+                      <TableRowColumn>{row.os}</TableRowColumn>
+                      <TableRowColumn>{row.description}</TableRowColumn>
+                      <TableRowColumn>{row.status}</TableRowColumn>
+                      <TableRowColumn>{row.priority}</TableRowColumn>
+                      <TableRowColumn>{row.escalation}</TableRowColumn>
+                      <TableRowColumn>{row.assignedTo}</TableRowColumn>
+                  </TableRow>))}
+              </TableBody>
+          </Table>
+      </div>)
 	}
 }
