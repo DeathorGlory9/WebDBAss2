@@ -3,7 +3,7 @@ import {Card, CardActions, CardHeader, CardText, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
 
 var commentValue = "";
-var ticketID = 1;
+var ticketID = 2;
 
 export default class Ticket extends React.Component {
 
@@ -14,6 +14,7 @@ export default class Ticket extends React.Component {
             this.props.history.push("/login");
             return ;
         }
+        this.getTicketData();
     }
 
     handleEditorChange = (e) => {
@@ -29,19 +30,31 @@ export default class Ticket extends React.Component {
 
           fetch(url);
       }
+    state = {
+        ticketData: []
+    };
+
+    getTicketData() {
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + ticketID;
+        fetch(url)
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    ticketData: json
+                });
+            })
+    }
 
     render() {
             return (
+
             <div>
                 <Card style={styles.leftCard}>
                     <CardHeader>
                         Ticket
                     </CardHeader>
                     <CardText>
-                        <TextField
-                            hintText="Hint Text"
-                            floatingLabelText="Floating Label Text"
-                        />
+                        <p>{this.state.ticketData.id}</p>
                         <br/>
                         <TextField
                             hintText="Hint Text"
