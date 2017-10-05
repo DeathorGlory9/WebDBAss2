@@ -132,4 +132,11 @@ class TicketController extends Controller
 
 		 return "Comment added";
 	}
+
+	public function getComments(Request $request, $ticketId)
+	{
+	  $comments = DB::table('comments')->where('ticketid', $ticketId)->get();
+
+	  return $comments;
+	}
 }

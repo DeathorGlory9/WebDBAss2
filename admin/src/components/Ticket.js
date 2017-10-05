@@ -1,11 +1,18 @@
 import React from 'react'
 import {Card, CardActions, CardHeader, CardText, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
+import { ChatFeed, Message } from 'react-chat-ui'
 
 var commentValue = "";
-var ticketID = 2;
+var ticketID = 1;
 
 export default class Ticket extends React.Component {
+
+	state = {
+		 ticketData: [],
+		 messages : [
+		 ],
+	};
 
     componentWillMount()
     {
@@ -15,26 +22,37 @@ export default class Ticket extends React.Component {
             return ;
         }
         this.getTicketData();
+
+		  this.getCommentData();
     }
 
     handleEditorChange = (e) => {
             commentValue = e.target.getContent();
       }
 
-      submitComment()
-      {
-          var author = "admin";
-          var comment =  commentValue.replace(/<[^>]*>/g, '');
-          comment = comment.replace(/[^a-zA-Z ]/g, "");
-          var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + ticketID + '/' + comment + '/' + author;
+    getCommentData() {
+ 		var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/get/' + ticketID;
 
-          fetch(url);
-      }
-    state = {
-        ticketData: []
-    };
+		var temp = [];
+		fetch(url)
+			.then(response => response.json())
+			.then(json => {
+				var tmpMessage;
+				var arrayvar = this.state.messages.slice();
+				var i = 0;
+				for(const ele in json) {
+					tmpMessage = (new Message({ id: i, message: json[ele]['comment']}));
+					arrayvar.push(tmpMessage);
+					i++;
+				};
 
-    getTicketData() {
+				this.setState({
+					messages: arrayvar
+				});
+		   })
+    }
+
+	 getTicketData() {
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + ticketID;
         fetch(url)
             .then(response => response.json())
@@ -44,6 +62,24 @@ export default class Ticket extends React.Component {
                 });
             })
     }
+
+	 submitComment(e)
+	 {
+		  var author = "admin";
+		  var comment =  commentValue.replace(/<[^>]*>/g, '');
+		  comment = comment.replace(/[^a-zA-Z ]/g, "");
+		  var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + ticketID + '/' + comment + '/' + author;
+
+		  fetch(url);
+
+		  var tmpMessage;
+		  var arrayvar = this.state.messages.slice();
+		  tmpMessage = (new Message({ id: 0, message: comment}));
+		  arrayvar.push(tmpMessage);
+		  this.setState({
+			  messages: arrayvar
+		  });
+	 }
 
     render() {
             return (
@@ -77,7 +113,24 @@ export default class Ticket extends React.Component {
                         Ticket Comments
                     </CardHeader>
                     <CardText>
-
+						  <ChatFeed
+							 messages={this.state.messages} // Boolean: list of message objects
+							 hasInputField={false} // Boolean: use our input, or use your own
+							 showSenderName // show the name of the user who sent the message
+							 bubblesCentered={false} //Boolean should the bubbles be centered in the feed?
+							 // JSON: Custom bubble styles
+							 bubbleStyles={
+								{
+								  text: {
+									 fontSize: 14
+								  },
+								  chatbubble: {
+									 borderRadius: 70,
+									 padding: 10
+								  }
+								}
+							 }
+						  />
                     </CardText>
                     <CardActions>
             		  <TinyMCE
@@ -91,7 +144,7 @@ export default class Ticket extends React.Component {
             			 }}
             			 onChange={this.handleEditorChange}
             		  />
-                      <button onClick={this.submitComment}>Submit Comment</button>
+                      <button onClick={this.submitComment.bind(this)}>Submit Comment</button>
                     </CardActions>
                 </Card>
             </div>
