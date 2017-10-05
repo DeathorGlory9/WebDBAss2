@@ -9,6 +9,7 @@ var ticketID = 1;
 export default class Ticket extends React.Component {
 
 	state = {
+		user: "admin",
 		 ticketData: [],
 		 messages : [
 		 ],
@@ -39,14 +40,22 @@ export default class Ticket extends React.Component {
 			.then(json => {
 				var tmpMessage;
 				var arrayvar = this.state.messages.slice();
-				var i = 0;
-				for(const ele in json) {
-					tmpMessage = (new Message({ id: i, message: json[ele]['comment']}));
+				var i
+
+				for(const ele in json)
+				{
+
+					if (json[ele]['author'] == this.state.author)
+						{i = 0;}
+					else
+						{i = 1;}
+
+					tmpMessage = (new Message({ id: i, message: json[ele]['comment'], senderName: json[ele]['author']}));
 					arrayvar.push(tmpMessage);
-					i++;
 				};
 
-				this.setState({
+				this.setState(
+				{
 					messages: arrayvar
 				});
 		   })
@@ -74,7 +83,7 @@ export default class Ticket extends React.Component {
 
 		  var tmpMessage;
 		  var arrayvar = this.state.messages.slice();
-		  tmpMessage = (new Message({ id: 0, message: comment}));
+		  tmpMessage = (new Message({ id: 0, message: comment, senderName: "test"}));
 		  arrayvar.push(tmpMessage);
 		  this.setState({
 			  messages: arrayvar
@@ -125,7 +134,7 @@ export default class Ticket extends React.Component {
 									 fontSize: 14
 								  },
 								  chatbubble: {
-									 borderRadius: 70,
+									 borderRadius: 10,
 									 padding: 10
 								  }
 								}
