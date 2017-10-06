@@ -3,11 +3,20 @@ import {RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow
 
 const appTokenKey = "appToken";
 
+
+
 export class TicketTable extends React.Component {
 
-    state = {
-        tableData: []
-    };
+    constructor(props) {
+       super(props)
+
+       this.state = {
+           tableData: [],
+           selectedRows: 0
+       }
+
+       this.onRowSelection = this.onRowSelection.bind(this);
+     }
 
     setTableData() {
         var temp = [];
@@ -25,14 +34,31 @@ export class TicketTable extends React.Component {
         this.setTableData();
     }
 
+    onRowSelection(rows)
+    {
+        this.setState({selectedRows: rows}, () => this.tableBody.setState({ selectedRows: rows }));
+    }
+
+    getTicketID()
+    {
+        if (this.state.tableData && this.state.tableData.length > 0)
+        {
+            var id = this.state.tableData[this.state.selectedRows].id;
+            return "ticket/" + id
+        }
+
+        return '';
+    }
+
     render()
     {
         return (
         <div>
+            <RaisedButton label="View" href={'/' + this.getTicketID()}/>
             <RaisedButton label="Assign"/>
             <RaisedButton label="Delete"/>
 
-            <Table>
+            <Table onRowSelection={this.onRowSelection}>
                 <TableHeader>
                     <TableRow>
                         <TableHeaderColumn>ID</TableHeaderColumn>
@@ -45,7 +71,7 @@ export class TicketTable extends React.Component {
                         <TableHeaderColumn>Assigned To</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody ref={(tableBody) => { this.tableBody = tableBody; }}>
                     {this.state.tableData.map((row, index) => (<TableRow key={index}>
                         <TableRowColumn>{row.id}</TableRowColumn>
                         <TableRowColumn>{row.issueTitle}</TableRowColumn>
