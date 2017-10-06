@@ -3,14 +3,18 @@ import Header from './Header'
 import Main from './Main'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-const App = () => (
-	<MuiThemeProvider>
-  <div>
-    <Header />
-    <Main />
-  </div>
-  </MuiThemeProvider>
-)
-
+class App extends Component {
+	render()
+	{
+		return(
+			<MuiThemeProvider>
+				<div>
+					<Header />
+					<Main />
+				</div>
+			</MuiThemeProvider>
+		)
+	}
+}
 
 export default App

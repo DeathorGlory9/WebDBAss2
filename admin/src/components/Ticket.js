@@ -4,7 +4,8 @@ import TinyMCE from 'react-tinymce';
 import { ChatFeed, Message } from 'react-chat-ui'
 
 var commentValue = "";
-var ticketID = 1;
+
+// const test = match.params.id;
 
 export default class Ticket extends React.Component {
 
@@ -12,7 +13,7 @@ export default class Ticket extends React.Component {
 		user: "admin",
 		 ticketData: [],
 		 messages : [
-		 ],
+		 ]
 	};
 
     componentWillMount()
@@ -24,7 +25,8 @@ export default class Ticket extends React.Component {
         }
         this.getTicketData();
 
-		  this.getCommentData();
+		this.getCommentData();
+
     }
 
     handleEditorChange = (e) => {
@@ -32,7 +34,8 @@ export default class Ticket extends React.Component {
       }
 
     getCommentData() {
- 		var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/get/' + ticketID;
+
+ 		var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/get/' + this.props.match.params.id;
 
 		var temp = [];
 		fetch(url)
@@ -62,14 +65,14 @@ export default class Ticket extends React.Component {
     }
 
 	 getTicketData() {
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + ticketID;
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id;
         fetch(url)
             .then(response => response.json())
             .then(json => {
                 this.setState({
                     ticketData: json
                 });
-				
+
 				for(const ele in json)
 				{
 					this.setState({
@@ -84,7 +87,7 @@ export default class Ticket extends React.Component {
 		  var author = "admin";
 		  var comment =  commentValue.replace(/<[^>]*>/g, '');
 		  comment = comment.replace(/[^a-zA-Z ]/g, "");
-		  var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + ticketID + '/' + comment + '/' + author;
+		  var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.match.params.id + '/' + comment + '/' + author;
 
 		  fetch(url);
 
