@@ -69,6 +69,13 @@ export default class Ticket extends React.Component {
                 this.setState({
                     ticketData: json
                 });
+				
+				for(const ele in json)
+				{
+					this.setState({
+						ticketData : {issueTitle : json[ele]["issueTitle"]}
+					});
+				}
             })
     }
 
@@ -96,7 +103,7 @@ export default class Ticket extends React.Component {
             <div>
                 <Card style={styles.leftCard}>
                     <CardHeader>
-                        Ticket
+                        <p>{this.state.ticketData.issueTitle}</p>
                     </CardHeader>
                     <CardText>
                         <p>{this.state.ticketData.id}</p>
