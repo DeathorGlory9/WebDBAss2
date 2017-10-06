@@ -10,7 +10,7 @@ var commentValue = "";
 export default class Ticket extends React.Component {
 
 	state = {
-		user: "admin",
+		user: localStorage.getItem('Name'),
 		 ticketData: [],
 		 messages : [
 		 ]
@@ -23,6 +23,7 @@ export default class Ticket extends React.Component {
             this.props.history.push("/login");
             return ;
         }
+
         this.getTicketData();
 
 		this.getCommentData();
@@ -48,7 +49,7 @@ export default class Ticket extends React.Component {
 				for(const ele in json)
 				{
 
-					if (json[ele]['author'] == this.state.author)
+					if (json[ele]['author'] == this.state.user)
 						{i = 0;}
 					else
 						{i = 1;}
@@ -84,7 +85,7 @@ export default class Ticket extends React.Component {
 
 	 submitComment(e)
 	 {
-		  var author = "admin";
+		  var author = this.state.user;
 		  var comment =  commentValue.replace(/<[^>]*>/g, '');
 		  comment = comment.replace(/[^a-zA-Z ]/g, "");
 		  var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.match.params.id + '/' + comment + '/' + author;
@@ -93,7 +94,7 @@ export default class Ticket extends React.Component {
 
 		  var tmpMessage;
 		  var arrayvar = this.state.messages.slice();
-		  tmpMessage = (new Message({ id: 0, message: comment, senderName: "test"}));
+		  tmpMessage = (new Message({ id: 0, message: comment, senderName: author}));
 		  arrayvar.push(tmpMessage);
 		  this.setState({
 			  messages: arrayvar
