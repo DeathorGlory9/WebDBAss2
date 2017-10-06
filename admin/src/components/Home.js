@@ -26,6 +26,6 @@ const HomePage = () => (
     <h1>Home page</h1>
 	{ localStorage.getItem('User') }
 	  <span><h2>My Tickets</h2></span>
-	  <TicketTable/>
+	  <TicketTable assignedTo={localStorage.getItem('id')}/>
   </div>
 )

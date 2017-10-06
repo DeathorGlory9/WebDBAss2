@@ -20,13 +20,26 @@ export class TicketTable extends React.Component {
 
     setTableData() {
         var temp = [];
-        fetch('http://localhost/WebDBAss2/webfiles/public/api/tickets/returnAll')
+
+        if (this.props.assignedTo != null)
+        {
+            fetch('http://localhost/WebDBAss2/webfiles/public/api/comments/getAllTicketsAssigned/' + this.props.assignedTo)
             .then(response => response.json())
             .then(json => {
                 this.setState({
                     tableData: json
                 });
             })
+        }
+        else {
+            fetch('http://localhost/WebDBAss2/webfiles/public/api/tickets/returnAll')
+                .then(response => response.json())
+                .then(json => {
+                    this.setState({
+                        tableData: json
+                    });
+                })
+        }
     }
 
     componentWillMount()

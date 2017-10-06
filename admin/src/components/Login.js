@@ -62,6 +62,7 @@ class Login extends React.Component {
         fb.database().ref().update(user)
         localStorage.setItem('User',type)
         localStorage.setItem('Name',this.state.user.displayName)
+        localStorage.setItem('id',this.state.user.uid)
     }
 
     handleSignout = () => {
