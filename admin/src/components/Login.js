@@ -1,16 +1,33 @@
 import React from "react";
-import {Card, CardActions, CardHeader, FontIcon, RaisedButton} from "material-ui";
-import { Route, Redirect } from 'react-router';
+import {RaisedButton} from "material-ui";
+import { Route } from 'react-router';
 import {fb} from "../config/constants";
+import Paper from "material-ui/Paper"
+import Redirect from "react-router-dom/es/Redirect";
 
 const cardStyles = {
   card : {
-      width: "25%",
-    margin: "auto",
-      marginTop: 50,
+      width: "30%",
+      margin: "35%",
+      marginTop: "20%",
+      display: 'inline-block',
+      textAlign: "center",
+      padding: 20
   },
     header: {
-        margin:"auto"
+        margin:"auto",
+        textAlign: "center",
+        display: 'inline-block'
+    },
+    buttons: {
+      margin: 10
+    },
+    button: {
+      margin: 20,
+        width: 120
+    },
+    background : {
+      backgroundColor: "#888888"
     }
 }
 
@@ -80,20 +97,22 @@ class Login extends React.Component {
     render()
     {
         return(
+            <div style={cardStyles.background}>
             <Route exact path="/login" render={() => (
                 this.state.user === null ? (
-                <Card style={cardStyles.card}>
-                    <CardHeader style={cardStyles.header} title="Login" />
-                    <CardActions>
-                        <RaisedButton style={{marginRight:10}} onClick={() => this.handleClick('helpdesk')}>Helpdesk User</RaisedButton>
-                        <RaisedButton onClick={() => this.handleClick('tech')}>Tech User</RaisedButton>
-                    </CardActions>
-                </Card>
+                <Paper style={cardStyles.card} zDepth={1}>
+                    <h1 style={cardStyles.header}>Login</h1>
+                    <div style={cardStyles.buttons}>
+                        <RaisedButton primary={true} style={cardStyles.button} onClick={() => this.handleClick('helpdesk')}>Helpdesk User</RaisedButton>
+                        <RaisedButton secondary={true} style={cardStyles.button} onClick={() => this.handleClick('tech')}>Tech User</RaisedButton>
+                    </div>
+                </Paper>
                 )
                 : (
                     <Redirect to="/" />
                 )
             )} />
+            </div>
         );
     }
 }

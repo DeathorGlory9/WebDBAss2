@@ -1,11 +1,21 @@
 import React from 'react'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui";
 import {TicketTable} from "./TicketTable";
+import Paper from 'material-ui/Paper';
 
 const appTokenKey = "appToken";
 
+const style = {
+	paper:{
+   	 margin: 20,
+   	 textAlign: 'center',
+   	 display: 'inline-block',}
+
+};
+
 export default class Home extends React.Component
 {
+
+
 	componentWillMount()
 	{
 		if (!localStorage.getItem('User'))
@@ -23,9 +33,10 @@ export default class Home extends React.Component
 
 const HomePage = () => (
   <div>
-    <h1>Home page</h1>
-	{ localStorage.getItem('User') }
-	  <span><h2>My Tickets</h2></span>
+
+	<Paper style={style.paper} zDepth={1}>
+	  <span><h2>{ localStorage.getItem('User') } - My Tickets</h2></span>
 	  <TicketTable assignedTo={localStorage.getItem('id')}/>
+	</Paper>
   </div>
 )

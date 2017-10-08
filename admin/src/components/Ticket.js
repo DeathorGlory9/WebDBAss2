@@ -1,20 +1,40 @@
 import React from 'react'
 import {Card, CardActions, CardHeader, CardText, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
-import { ChatFeed, Message } from 'react-chat-ui'
+import { ChatFeed, Message } from 'react-chat-ui';
+import Paper from "material-ui/Paper"
 
 var commentValue = "";
 
 // const test = match.params.id;
 
+
+const styles = {
+    leftCard: {
+		//float: 'left',
+		//display: "inline-block",
+        margin: "10%",
+        padding: 10,
+		textAlign: "Center"
+    },
+    rightCard: {
+        //float: 'right',
+        //display: "inline-block",
+		margin: "10%",
+		padding: 10
+    }
+}
+
 export default class Ticket extends React.Component {
 
-	state = {
-		user: localStorage.getItem('Name'),
-		 ticketData: [],
-		 messages : [
-		 ]
-	};
+	constructor() {
+		super();
+		this.state = {
+            user: localStorage.getItem('Name'),
+            ticketData: [],
+            messages : []
+        };
+	}
 
     componentWillMount()
     {
@@ -68,19 +88,20 @@ export default class Ticket extends React.Component {
 	 getTicketData() {
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id;
         fetch(url)
-            .then(response => response.json())
-            .then(json => {
-                this.setState({
-                    ticketData: json
-                });
-
-				for(const ele in json)
-				{
-					this.setState({
-						ticketData : {issueTitle : json[ele]["issueTitle"]}
-					});
-				}
+            .then(response => {response.json();
+	 })
+            .then(data => {
+                // let ticketData = data.results.map((ticket) => {
+            		// return(
+            		// 	<div key={ticket.results}>
+				// 			{ticket.ticketData.id}
+				// 		</div>
+				// 	)
+				// });
+                this.setState({ticketData: data});
+                console.log("STATE:", this.state.ticketData);
             })
+
     }
 
 	 submitComment(e)
@@ -103,14 +124,11 @@ export default class Ticket extends React.Component {
 
     render() {
             return (
+			<div>
+            	<Paper style={styles.leftCard}>
 
-            <div>
-                <Card style={styles.leftCard}>
-                    <CardHeader>
-                        <p>{this.state.ticketData.issueTitle}</p>
-                    </CardHeader>
-                    <CardText>
-                        <p>{this.state.ticketData.id}</p>
+                        <h2>{this.state.ticketData}</h2>
+
                         <br/>
                         <TextField
                             hintText="Hint Text"
@@ -122,17 +140,12 @@ export default class Ticket extends React.Component {
                             floatingLabelText="Floating Label Text"
                         />
                         <br/>
-
-                    </CardText>
-                    <CardActions>
-
-                    </CardActions>
-                </Card>
-                <Card style={styles.rightCard}>
-                    <CardHeader>
+                </Paper>
+                <Paper style={styles.rightCard}>
+                    <h1>
                         Ticket Comments
-                    </CardHeader>
-                    <CardText>
+                    </h1>
+                    <div>
 						  <ChatFeed
 							 messages={this.state.messages} // Boolean: list of message objects
 							 hasInputField={false} // Boolean: use our input, or use your own
@@ -151,8 +164,8 @@ export default class Ticket extends React.Component {
 								}
 							 }
 						  />
-                    </CardText>
-                    <CardActions>
+                    </div>
+                    <div>
             		  <TinyMCE
             			 content="<p>Insert comment here.</p>"
             			 config={{
@@ -165,22 +178,11 @@ export default class Ticket extends React.Component {
             			 onChange={this.handleEditorChange}
             		  />
                       <button onClick={this.submitComment.bind(this)}>Submit Comment</button>
-                    </CardActions>
-                </Card>
-            </div>
+                    </div>
+				</Paper>
+			</div>
         )
     }
 }
 
-const styles = {
-    leftCard: {
-        float: 'left'
-    },
-    rightCard: {
-        float: 'right'
-    }
-}
 
-// const TicketCard = () => (
-//
-// );
