@@ -131,7 +131,7 @@ export default class Ticket extends React.Component {
 
 	 submitComment(e)
 	 {
-		  var author = this.state.user;
+		  var author = localStorage.getItem('Name');
 		  var comment =  commentValue.replace(/<[^>]*>/g, '');
 		  comment = comment.replace(/[^a-zA-Z ]/g, "");
 		  var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.match.params.id + '/' + comment + '/' + author;
@@ -234,5 +234,3 @@ export default class Ticket extends React.Component {
         )
     }
 }
-
-
