@@ -136,7 +136,13 @@ export default class Ticket extends React.Component {
 		  comment = comment.replace(/[^a-zA-Z ]/g, "");
 		  var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.match.params.id + '/' + comment + '/' + author;
 
-		  fetch(url);
+		  fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data;',
+            }
+          });
 
 		  var tmpMessage;
 		  var arrayvar = this.state.messages.slice();

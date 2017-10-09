@@ -25,19 +25,19 @@ Route::group(['middleware' => 'cors'], function () {
     //Get one ticket
     Route::get('tickets/returnTicket/{id}','TicketController@getTicket');
     //Update ticket status
-    Route::get('tickets/statusupdate/{id}/{status}','TicketController@updateTicketStatus');
+    Route::put('tickets/statusupdate/{id}/{status}','TicketController@updateTicketStatus');
     //Update ticket priority
-    Route::get('tickets/statusupdate/{id}/{priority}','TicketController@updateTicketPriority');
+    Route::put('tickets/priorityupdate/{id}/{priority}','TicketController@updateTicketPriority');
     //Update ticket escalation
-    Route::get('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
+    Route::put('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
     //Add comment to ticket
-    Route::get('comments/add/{id}/{comment}/{author}','TicketController@addComment');
+    Route::post('comments/add/{id}/{comment}/{author}','TicketController@addComment');
 	 //Get all ticket comments
     Route::get('comments/get/{ticketId}','TicketController@getComments');
     //get all tickets assigned to the user
     Route::get('comments/getAllTicketsAssigned/{userId}','TicketController@getAllTicketsAssigned');
     //assign a ticket to a user
-    Route::get('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
+    Route::put('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
     //create ticket
     Route::post('tickets/create', 'TicketController@createTicket');
 });

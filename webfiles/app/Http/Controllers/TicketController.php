@@ -91,74 +91,113 @@ class TicketController extends Controller
     // Update a tickets status
     public function updateTicketStatus(Request $request, $id, $status)
 	{
-		$ticket = DB::table('tickets')->where('id', $id)->update(array('status' => $status));
-
-        return "Update successful";
+        try
+        {
+            $ticket = DB::table('tickets')->where('id', $id)->update(array('status' => $status));
+            return "Update successful";
+        }
+        catch(Exception $e)
+        {
+            return "fail";
+        }
 	}
 
     // Update a tickts priority
     public function updateTicketPriority(Request $request, $id, $priority)
 	{
-		$ticket = DB::table('tickets')->where('id', $id)->update(array('priority' => $priority));
+        try
+        {
+    		$ticket = DB::table('tickets')->where('id', $id)->update(array('priority' => $priority));
 
-        return "Update successful";
+            return "Update successful";
+        }
+        catch(Exception $e)
+        {
+            return "fail";
+        }
 	}
 
     // Update a tickts escalation
     public function updateTicketEscalation(Request $request, $id, $escalation)
 	{
-		$ticket = DB::table('tickets')->where('id', $id)->update(array('escalation' => $escalation));
+        try
+        {
+            $ticket = DB::table('tickets')->where('id', $id)->update(array('escalation' => $escalation));
 
-        return "Update successful";
+            return "Update successful";
+        }
+        catch(Exception $e)
+        {
+            return "fail";
+        }
 	}
 
 	public function assignTicket(Request $request, $ticketId, $userId)
 	{
-		$ticket = DB::table('tickets')->where('id', $ticketId)->update(array('assignedto' => $userId));
+        try
+        {
+    		$ticket = DB::table('tickets')->where('id', $ticketId)->update(array('assignedto' => $userId));
 
-        return "Ticket assigned";
+            return "Ticket assigned";
+        }
+        catch(Exception $e)
+        {
+            return "fail";
+        }
 	}
 
-	//Add a comment to a ticket
-	public function addComment(Request $request, $id, $comment, $author)
-  {
-		 $comment = [
-			 'ticketid' => 1,
-			  'comment' => $comment,
-			  'author' => $author
-		 ];
+    //Add a comment to a ticket
+    public function addComment(Request $request, $id, $comment, $author)
+    {
+        try
+        {
+            $comment =[
+                'ticketid' => 1,
+                'comment' => $comment,
+                'author' => $author
+            ];
 
-		 Comment::create($comment);
+            Comment::create($comment);
+            
+            return "Comment added";
+        }
+        catch(Exception $e)
+        {
+            return "fail";
+        }
+    }
 
-		 return "Comment added";
-	}
+    public function getComments(Request $request, $ticketId)
+    {
+        $comments = DB::table('comments')->where('ticketid', $ticketId)->get();
 
-	public function getComments(Request $request, $ticketId)
-	{
-	  $comments = DB::table('comments')->where('ticketid', $ticketId)->get();
-
-	  return $comments;
-	}
+        return $comments;
+    }
 
 	public function createTicket(Request $request)
     {
+        try
+        {
+            $ticket = new Ticket;
 
-        $ticket = new Ticket;
+            $ticket->issueTitle = $request->input('issueTitle');
+            $ticket->os = $request->input('os');
+            $ticket->description = $request->input('description');
+            $ticket->status = $request->input('status');
+            $ticket->priority = $request->input('priority');
+            $ticket->escalation = $request->input('escalation');
+            $ticket->assignedto = $request->input('assignedto');
 
-        $ticket->issueTitle = $request->input('issueTitle');
-        $ticket->os = $request->input('os');
-        $ticket->description = $request->input('description');
-        $ticket->status = $request->input('status');
-        $ticket->priority = $request->input('priority');
-        $ticket->escalation = $request->input('escalation');
-        $ticket->assignedto = $request->input('assignedto');
+            if($ticket->save()) {
+                return $ticket;
+            }
 
-        if($ticket->save()) {
-            return $ticket;
+            // throw new HttpException(400, "Invalid data");
         }
-
-        throw new HttpException(400, "Invalid data");
-
+        catch(Exception $e)
+        {
+            return "fail";
+        }
         //Ticket::create($ticket);
     }
 }
