@@ -181,6 +181,7 @@ class TicketController extends Controller
             $ticket = new Ticket;
 
             $ticket->issueTitle = $request->input('issueTitle');
+            $ticket->userid = $request->input('userid');
             $ticket->os = $request->input('os');
             $ticket->description = $request->input('description');
             $ticket->status = $request->input('status');

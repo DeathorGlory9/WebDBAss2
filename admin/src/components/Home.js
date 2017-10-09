@@ -23,20 +23,42 @@ export default class Home extends React.Component
 			this.props.history.push("/login");
 			return;
 		}
+
 	}
+
+
 
 	render()
 	{
-		return <HomePage/>;
+		return (<HomePage userType={localStorage.getItem('User')}/>);
 	}
 }
 
-const HomePage = () => (
-  <div>
+function HomePage(props) {
+    const userType = props.userType;
 
+    if (userType == 'helpdesk') {
+        return <HelpdeskHome/>;
+    }
+    else {
+        return <TechnicalHome/>;
+    }
+}
+
+const HelpdeskHome = () => (
+  <div>
 	<Paper style={style.paper} zDepth={1}>
-	  <span><h2>{ localStorage.getItem('User') } - My Tickets</h2></span>
-	  <TicketTable assignedTo={localStorage.getItem('id')}/>
+	  <span><h2>Helpdesk - All Recent Tickets</h2></span>
+	  <TicketTable/>
 	</Paper>
   </div>
+)
+
+const TechnicalHome = () => (
+	<div>
+		<Paper style={style.paper} zDepth={1}>
+			<span><h2>Technical - My Tickets</h2></span>
+			<TicketTable assignedTo={localStorage.getItem('id')}/>
+		</Paper>
+	</div>
 )

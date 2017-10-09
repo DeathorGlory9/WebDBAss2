@@ -4,13 +4,19 @@ import {RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow
 const appTokenKey = "appToken";
 
 const style = {
+    paper: {
+      textAlign: "center",
+        align: "center"
+    },
     button: {
         margin: 10,
         textAlign: 'right',
         display: 'inline-block'
     },
     table: {
-        margin: 20
+        margin: 20,
+        width: "90%",
+        align: "center"
     }
 }
 
@@ -75,7 +81,7 @@ export class TicketTable extends React.Component {
     render()
     {
         return (
-        <div>
+        <div style={style.paper}>
             <RaisedButton style={style.button} label="View" href={'/' + this.getTicketID()}/>
             <RaisedButton style={style.button} label="Assign"/>
             <RaisedButton style={style.button} label="Delete"/>

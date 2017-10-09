@@ -2,8 +2,19 @@ import React from 'react'
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 
+const style = {
+    button: {
+        color: "#FFF",
+        verticalAlign: "Center",
+    },
+    div : {
+        verticalAlign: "Center"
+    }
+}
+
 export default class Header extends React.Component
 {
+
 	render()
 	{
 		return <HeaderSection/>;
@@ -15,15 +26,16 @@ export default class Header extends React.Component
 const HeaderSection = () => (
 	<header>
 		<AppBar
+
 		title="Helpdesk Portal"
 		iconElementRight={<RightMenuButtons/>}/>
 	</header>
 );
 
 const RightMenuButtons = () => (
-	<div>
-		<FlatButton href='/' label="Home"/>
-		<FlatButton href='/viewAllTickets' label="View All Tickets"/>
-		<FlatButton href='/logout' label="Logout"/>
+	<div style={style.div}>
+		<FlatButton style={style.button} href='/' label="Home"/>
+		<FlatButton style={style.button} href='/logout' label="Logout"/>
 	</div>
 );
+
