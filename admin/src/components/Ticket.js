@@ -1,5 +1,5 @@
 import React from 'react'
-import {RaisedButton, SelectField, TextField} from "material-ui";
+import {MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
 import { ChatFeed, Message } from 'react-chat-ui';
 import Paper from "material-ui/Paper";
@@ -49,6 +49,8 @@ const styles = {
 	}
 }
 
+const assignedtoMenuItems = [];
+
 export default class Ticket extends React.Component {
 
 	constructor() {
@@ -56,7 +58,8 @@ export default class Ticket extends React.Component {
 		this.state = {
             user: localStorage.getItem('Name'),
             ticketData: {},
-            messages : []
+            messages : [],
+			techUsers: [],
         };
 	}
 
@@ -71,6 +74,8 @@ export default class Ticket extends React.Component {
         this.getTicketData();
 
 		this.getCommentData();
+
+		this.getTechUsers();
 
     }
 
@@ -127,6 +132,30 @@ export default class Ticket extends React.Component {
 
 			}.bind(this))
 
+
+    }
+
+    getTechUsers() {
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/techusers/getAllTechUsers';
+        var TechUsers = [];
+        fetch(url, {
+            method: 'GET',
+        })
+
+            .then(function(response ) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data);
+                TechUsers = data;
+                console.log("TECH:", data);
+                this.setState({techUsers: TechUsers})
+
+				this.state.techUsers.forEach(function(User) {
+					assignedtoMenuItems.push(<MenuItem value={User} key={User} primaryText={User.displayName}/>);
+				})
+            }.bind(this))
+
     }
 
 	 submitComment(e)
@@ -152,6 +181,21 @@ export default class Ticket extends React.Component {
 			  messages: arrayvar
 		  });
 	 }
+
+    assignedtoChanged = (event, index, value) => {
+		this.setState({ticketData:{assignedto:value}});
+		var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/' + this.props.match.params.id + '/' + value;
+
+		fetch(url, {
+			method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data;',
+            }
+		});
+	}
+
+    escalationChanged = (event, index, value) => this.setState({ticketData:{escalation:value}});
 
     render() {
             return (
@@ -181,16 +225,24 @@ export default class Ticket extends React.Component {
 							value={this.state.ticketData.priority}
 						/>
 						<br/>
-						<TextField
+						<SelectField
 							floatingLabelText="Escalation"
 							value={this.state.ticketData.escalation}
-						/>
+							onChange={this.escalationChanged}
+						>
+							<MenuItem value="1" primaryText="1"/>
+							<MenuItem value="2" primaryText="2"/>
+							<MenuItem value="3" primaryText="3"/>
+						</SelectField>
 						<br/>
 						<SelectField
 							floatingLabelText="Assigned To"
 							value={this.state.ticketData.assignedto}
 							style={styles.select}
-						/>
+							onChange={this.assignedtoChanged}
+						>
+							{assignedtoMenuItems}
+						</SelectField>
 						<br/>
 						<RaisedButton label="Resolve" primary={true} fullWidth={true} style={styles.button}></RaisedButton>
 						<br/>
