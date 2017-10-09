@@ -15,7 +15,7 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ticketId')->unsigned();
+            $table->integer('ticket_id')->unsigned();
             $table->string('comment');
             $table->string('author');
 			$table->datetime('updated_at');
@@ -23,7 +23,7 @@ class CreateCommentsTable extends Migration
         });
 
 		Schema::table('comments', function (Blueprint $table) {
-			$table->foreign('ticketId')->references('id')->on('tickets');
+			$table->foreign('ticket_id')->references('id')->on('tickets');
 		});
     }
 

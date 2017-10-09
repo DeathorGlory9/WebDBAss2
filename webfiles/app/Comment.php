@@ -10,6 +10,11 @@ class Comment extends Model
     use Notifiable;
 
     protected $fillable = [
-        'ticketid', 'comment', 'author'
+        'ticket_id', 'comment', 'author'
     ];
+
+    public function ticket()
+    {
+        return $this->belongsTo('App\Ticket');
+    }
 }

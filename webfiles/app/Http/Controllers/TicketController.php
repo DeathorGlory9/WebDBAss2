@@ -39,29 +39,20 @@ class TicketController extends Controller
     {
 		$ticket = DB::table('tickets')->where('id', $id)->first();
 		$user = DB::table('users')->where('id', $ticket->userid)->first();
-		$comments = DB::table('comments')->where('ticketId', $id)->orderBy('created_at', 'ASC')->get();
+
+		//$comments = DB::table('comments')->where('ticketId', $id)->orderBy('created_at', 'ASC')->get();
+        $comments = Ticket::find($id)->comments;
+
 
 		return view('pages.viewticket', ['ticket' => $ticket,'user' => $user,'comments' => $comments] ) ;
     }
 
-	 public function showAllTickets()
-	{
-		$tickets = DB::table('tickets')->get();
+    public function showAllTickets()
+    {
+        $tickets = DB::table('tickets')->get();
 
-		return view('pages.viewalltickets', ['tickets' => $tickets] ) ;
-	}
-
-    public function storeComment(Request $request)
-	{
-	     $this->validate($request, [
-	         'comment' => 'required|max:250',
-	         'author' => 'required|max:50'
-	     ]);
-
-	     Comment::create($request->all());
-
-	     return redirect()->route('pages.viewticket', [$request->ticketid]);
-	 }
+        return view('pages.viewalltickets', ['tickets' => $tickets] ) ;
+    }
 
     // Api functions
     // Get all tickets
@@ -146,34 +137,6 @@ class TicketController extends Controller
         }
 	}
 
-    //Add a comment to a ticket
-    public function addComment(Request $request, $id, $comment, $author)
-    {
-        try
-        {
-            $comment =[
-                'ticketid' => 1,
-                'comment' => $comment,
-                'author' => $author
-            ];
-
-            Comment::create($comment);
-            
-            return "Comment added";
-        }
-        catch(Exception $e)
-        {
-            return "fail";
-        }
-    }
-
-    public function getComments(Request $request, $ticketId)
-    {
-        $comments = DB::table('comments')->where('ticketid', $ticketId)->get();
-
-        return $comments;
-    }
-
 	public function createTicket(Request $request)
     {
         try
@@ -200,5 +163,12 @@ class TicketController extends Controller
             return "fail";
         }
         //Ticket::create($ticket);
+    }
+
+    public function getComments(Request $request, $ticketId)
+    {
+        $comments = Ticket::find($ticketId)->comments;
+
+        return $comments;
     }
 }
