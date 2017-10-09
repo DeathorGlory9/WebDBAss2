@@ -1,8 +1,9 @@
 import React from 'react'
-import {Card, CardActions, CardHeader, CardText, TextField} from "material-ui";
+import {SelectField, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
 import { ChatFeed, Message } from 'react-chat-ui';
-import Paper from "material-ui/Paper"
+import Paper from "material-ui/Paper";
+import 'whatwg-fetch';
 
 var commentValue = "";
 
@@ -31,7 +32,7 @@ export default class Ticket extends React.Component {
 		super();
 		this.state = {
             user: localStorage.getItem('Name'),
-            ticketData: [],
+            ticketData: {},
             messages : []
         };
 	}
@@ -86,23 +87,28 @@ export default class Ticket extends React.Component {
     }
 
 	 getTicketData() {
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id;
-        fetch(url)
-            .then(response => {response.json();
-	 })
-            .then(data => {
-                // let ticketData = data.results.map((ticket) => {
-            		// return(
-            		// 	<div key={ticket.results}>
-				// 			{ticket.ticketData.id}
-				// 		</div>
-				// 	)
-				// });
-                this.setState({ticketData: data});
-                console.log("STATE:", this.state.ticketData);
-            })
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/1' ;
+        var Ticket = {};
+        fetch(url, {
+            method: 'GET',
+        })
+
+            .then(function(response ) {
+            return response.json();
+			})
+            .then(function(data) {
+                console.log(data);
+                Ticket = data[0];
+                console.log("DATA 0:", data[0]);
+                this.setState({ticketData: Ticket})
+
+			}.bind(this))
 
     }
+
+    setStateforTicket(data) {
+        this.setState({ticketData: data});
+	}
 
 	 submitComment(e)
 	 {
@@ -127,19 +133,40 @@ export default class Ticket extends React.Component {
 			<div>
             	<Paper style={styles.leftCard}>
 
-                        <h2>{this.state.ticketData}</h2>
+                        <h2>{this.state.ticketData.issueTitle}</h2>
+						<h2>{this.state.ticketData.status}</h2>
 
                         <br/>
                         <TextField
-                            hintText="Hint Text"
-                            floatingLabelText="Floating Label Text"
+                            floatingLabelText="ID"
+							value={this.state.ticketData.id}
                         />
                         <br/>
                         <TextField
-                            hintText="Hint Text"
-                            floatingLabelText="Floating Label Text"
+                            floatingLabelText="Operating System"
+							value={this.state.ticketData.os}
                         />
                         <br/>
+					<TextField
+						floatingLabelText="Description"
+						value={this.state.ticketData.description}
+					/>
+					<br/>
+					<TextField
+						floatingLabelText="Priority"
+						value={this.state.ticketData.priority}
+					/>
+					<br/>
+					<TextField
+						floatingLabelText="Escalation"
+						value={this.state.ticketData.escalation}
+					/>
+					<br/>
+					<SelectField
+						floatingLabelText="Assigned To"
+						value={this.state.ticketData.assignedto}
+					/>
+					<br/>
                 </Paper>
                 <Paper style={styles.rightCard}>
                     <h1>
