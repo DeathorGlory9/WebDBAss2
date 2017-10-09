@@ -11,7 +11,7 @@ use DB;
 class TechUserController extends Controller
 {
     // Api functions
-    // Get all tickets
+    // Get all tech users
     public function getAllTechUsers()
     {
 		$techusers = DB::table('techusers')->get();
@@ -19,7 +19,14 @@ class TechUserController extends Controller
 		return $techusers;
     }
 
-    //Add a comment to a ticket
+    public function getTechUsers(Request $request, $id)
+    {
+		$techuser = DB::table('techusers')->where('id', $id)->get();
+
+		return $techuser;
+    }
+
+    //Add a tech user
     public function addTechUser(Request $request, $id, $name)
     {
         try

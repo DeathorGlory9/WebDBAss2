@@ -43,6 +43,8 @@ Route::group(['middleware' => 'cors'], function () {
 
     //get all tech users
     Route::get('techusers/getAllTechUsers','TechUserController@getAllTechUsers');
+    //get all tech users
+    Route::get('techusers/getTechUser/{id}','TechUserController@getTechUsers');
     //create ticket
     Route::post('techusers/create/{id}/{name}', 'TechUserController@addTechUser');
 });
