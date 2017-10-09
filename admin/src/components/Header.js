@@ -24,7 +24,6 @@ const RightMenuButtons = () => (
 	<div>
 		<FlatButton href='/' label="Home"/>
 		<FlatButton href='/viewAllTickets' label="View All Tickets"/>
-		<FlatButton href='/newTicket/' label="Create Ticket"/>
 		<FlatButton href='/logout' label="Logout"/>
 	</div>
 );

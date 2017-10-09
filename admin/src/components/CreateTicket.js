@@ -2,7 +2,7 @@
  * Created by meaganc on 9/10/17.
  */
 import React from 'react'
-import {RaisedButton, SelectField, TextField} from "material-ui";
+import {MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
 import { ChatFeed, Message } from 'react-chat-ui';
 import Paper from "material-ui/Paper";
@@ -65,90 +65,22 @@ export default class CreateTicket extends React.Component {
         if (!localStorage.getItem('User'))
         {
             this.props.history.push("/login");
-            return ;
+
         }
 
-        this.getTicketData();
-
-        this.getCommentData();
-
     }
 
-    handleEditorChange = (e) => {
-        commentValue = e.target.getContent();
-    }
 
-    getCommentData() {
 
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/get/' + this.props.match.params.id;
+    handleSubmit() {
+        var form = document.querySelector('form')
 
-        var temp = [];
-        fetch(url)
-            .then(response => response.json())
-            .then(json => {
-                var tmpMessage;
-                var arrayvar = this.state.messages.slice();
-                var i
-
-                for(const ele in json)
-                {
-
-                    if (json[ele]['author'] == this.state.user)
-                    {i = 0;}
-                    else
-                    {i = 1;}
-
-                    tmpMessage = (new Message({ id: i, message: json[ele]['comment'], senderName: json[ele]['author']}));
-                    arrayvar.push(tmpMessage);
-                };
-
-                this.setState(
-                    {
-                        messages: arrayvar
-                    });
-            })
-    }
-
-    getTicketData() {
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/1' ;
-        var Ticket = {};
-        fetch(url, {
-            method: 'GET',
+        fetch('http://localhost/WebDBAss2/webfiles/public/api/tickets/createTicket', {
+            method: 'POST',
+            body: new FormData(form)
+        }).then(function () {
+            this.props.router.push('/home');
         })
-
-            .then(function(response ) {
-                return response.json();
-            })
-            .then(function(data) {
-                console.log(data);
-                Ticket = data[0];
-                console.log("DATA 0:", data[0]);
-                this.setState({ticketData: Ticket})
-
-            }.bind(this))
-
-    }
-
-    setStateforTicket(data) {
-        this.setState({ticketData: data});
-    }
-
-    submitComment(e)
-    {
-        var author = this.state.user;
-        var comment =  commentValue.replace(/<[^>]*>/g, '');
-        comment = comment.replace(/[^a-zA-Z ]/g, "");
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.match.params.id + '/' + comment + '/' + author;
-
-        fetch(url);
-
-        var tmpMessage;
-        var arrayvar = this.state.messages.slice();
-        tmpMessage = (new Message({ id: 0, message: comment, senderName: author}));
-        arrayvar.push(tmpMessage);
-        this.setState({
-            messages: arrayvar
-        });
     }
 
     render() {
@@ -156,84 +88,61 @@ export default class CreateTicket extends React.Component {
             <div style={styles.div}>
                 <Paper style={styles.leftCard}>
 
-                    <h2>{this.state.ticketData.issueTitle}</h2>
-                    <h2>Status: {this.state.ticketData.status}</h2>
+                    <h2>New Ticket</h2>
                     <div>
+                        <form onSubmit={this.handleSubmit}>
                         <TextField
-                            floatingLabelText="ID"
-
+                            floatingLabelText="Issue Title"
+                            name="issueTitle"
                         />
                         <br/>
                         <SelectField
                             floatingLabelText="Operating System"
-
-                        />
+                            name="os"
+                        >
+                            <MenuItem value="iOS" primaryText="iOS"/>
+                            <MenuItem value="Windows" primaryText="Windows"/>
+                            <MenuItem value="Linux" primaryText="Linux"/>
+                        </SelectField>
                         <br/>
                         <TextField
                             floatingLabelText="Description"
+                            name="description"
 
                         />
                         <br/>
                         <SelectField
                             floatingLabelText="Priority"
+                            name="priority"
 
-                        />
+                        >
+                            <MenuItem value="Low" primaryText="Low"/>
+                            <MenuItem value="Medium" primaryText="Medium"/>
+                            <MenuItem value="High" primaryText="High"/>
+                        </SelectField>
+
                         <br/>
                         <SelectField
                             floatingLabelText="Escalation"
+                            name="escalation"
 
-                        />
+                        >
+                            <MenuItem value="1" primaryText="1"/>
+                            <MenuItem value="2" primaryText="2"/>
+                            <MenuItem value="3" primaryText="3"/>
+                        </SelectField>
                         <br/>
                         <SelectField
                             floatingLabelText="Assigned To"
-
+                            name="assignedto"
                             style={styles.select}
                         />
                         <br/>
-                        <RaisedButton label="Resolve" primary={true} fullWidth={true} style={styles.button}></RaisedButton>
-                        <br/>
-                        <RaisedButton label="Unresolve" secondary={true} fullWidth={true} style={styles.button}></RaisedButton>
+                        <RaisedButton label="Submit" primary={true} fullWidth={true} style={styles.button} type="submit"/>
+                        </form>
                     </div>
                 </Paper>
-                <Paper style={styles.rightCard}>
-                    <h1>
-                        Ticket Comments - {this.state.user}
-                    </h1>
-                    <div>
-                        <ChatFeed
-                            messages={this.state.messages} // Boolean: list of message objects
-                            hasInputField={false} // Boolean: use our input, or use your own
-                            showSenderName // show the name of the user who sent the message
-                            bubblesCentered={false} //Boolean should the bubbles be centered in the feed?
-                            // JSON: Custom bubble styles
-                            bubbleStyles={
-                                {
-                                    text: {
-                                        fontSize: 14
-                                    },
-                                    chatbubble: {
-                                        borderRadius: 10,
-                                        padding: 10
-                                    }
-                                }
-                            }
-                        />
-                    </div>
-                    <div>
-                        <TinyMCE
-                            content="<p>Insert comment here.</p>"
-                            config={{
-                                plugins: 'link image code',
-                                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code',
-                                statusbar: false,
-                                allow_html_in_named_anchor: false,
-                                menubar: false
-                            }}
-                            onChange={this.handleEditorChange}
-                        />
-                        <button onClick={this.submitComment.bind(this)}>Submit Comment</button>
-                    </div>
-                </Paper>
+
             </div>
         )
     }

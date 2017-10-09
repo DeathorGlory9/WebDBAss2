@@ -38,4 +38,6 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('comments/getAllTicketsAssigned/{userId}','TicketController@getAllTicketsAssigned');
     //assign a ticket to a user
     Route::get('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
+    //create ticket
+    Route::post('tickets/create', 'TicketController@createTicket');
 });

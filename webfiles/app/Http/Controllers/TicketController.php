@@ -139,4 +139,26 @@ class TicketController extends Controller
 
 	  return $comments;
 	}
+
+	public function createTicket(Request $request)
+    {
+
+        $ticket = new Ticket;
+
+        $ticket->issueTitle = $request->input('issueTitle');
+        $ticket->os = $request->input('os');
+        $ticket->description = $request->input('description');
+        $ticket->status = $request->input('status');
+        $ticket->priority = $request->input('priority');
+        $ticket->escalation = $request->input('escalation');
+        $ticket->assignedto = $request->input('assignedto');
+
+        if($ticket->save()) {
+            return $ticket;
+        }
+
+        throw new HttpException(400, "Invalid data");
+
+        //Ticket::create($ticket);
+    }
 }

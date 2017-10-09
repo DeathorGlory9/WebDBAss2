@@ -18,7 +18,8 @@ const styles = {
         padding: 10,
 		textAlign: "Center",
         verticalAlign: "top",
-		height: 670
+		height: 670,
+		width: "30%"
     },
     rightCard: {
         //float: 'right',
@@ -26,7 +27,8 @@ const styles = {
 		margin: 10,
 		padding: 10,
 		verticalAlign: "top",
-        height: 670
+        height: 670,
+		width: "50%"
     },
     column1: {
         position: "absolute",
@@ -38,7 +40,8 @@ const styles = {
 	},
 	div: {
     	textAlign: "center",
-		paddingTop: 10
+		paddingTop: 10,
+		width: "100%"
 	},
 	button : {
 		marginTop: 5,
@@ -107,7 +110,7 @@ export default class Ticket extends React.Component {
     }
 
 	 getTicketData() {
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/1' ;
+		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id ;
         var Ticket = {};
         fetch(url, {
             method: 'GET',
@@ -125,10 +128,6 @@ export default class Ticket extends React.Component {
 			}.bind(this))
 
     }
-
-    setStateforTicket(data) {
-        this.setState({ticketData: data});
-	}
 
 	 submitComment(e)
 	 {
