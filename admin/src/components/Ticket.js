@@ -13,17 +13,31 @@ var commentValue = "";
 const styles = {
     leftCard: {
 		//float: 'left',
-		//display: "inline-block",
-        margin: "10%",
+		display: "inline-block",
+        margin: 10,
         padding: 10,
-		textAlign: "Center"
+		textAlign: "Center",
+        verticalAlign: "top"
     },
     rightCard: {
         //float: 'right',
-        //display: "inline-block",
-		margin: "10%",
-		padding: 10
-    }
+        display: "inline-block",
+		margin: 10,
+		padding: 10,
+		verticalAlign: "top"
+    },
+    column1: {
+        position: "absolute",
+        display: "inline-block",
+		verticalAlign: "center",
+		textAlign: "center"
+        //margin: "%",
+        //padding: 10
+	},
+	div: {
+    	textAlign: "center",
+		paddingTop: "5%"
+	}
 }
 
 export default class Ticket extends React.Component {
@@ -130,47 +144,48 @@ export default class Ticket extends React.Component {
 
     render() {
             return (
-			<div>
+			<div style={styles.div}>
             	<Paper style={styles.leftCard}>
 
                         <h2>{this.state.ticketData.issueTitle}</h2>
-						<h2>{this.state.ticketData.status}</h2>
-
-                        <br/>
-                        <TextField
+						<h2>Status: {this.state.ticketData.status}</h2>
+					<div>
+							<TextField
                             floatingLabelText="ID"
 							value={this.state.ticketData.id}
-                        />
-                        <br/>
+                        	/>
+						<br/>
                         <TextField
                             floatingLabelText="Operating System"
 							value={this.state.ticketData.os}
                         />
                         <br/>
-					<TextField
-						floatingLabelText="Description"
-						value={this.state.ticketData.description}
-					/>
-					<br/>
-					<TextField
-						floatingLabelText="Priority"
-						value={this.state.ticketData.priority}
-					/>
-					<br/>
-					<TextField
-						floatingLabelText="Escalation"
-						value={this.state.ticketData.escalation}
-					/>
-					<br/>
-					<SelectField
-						floatingLabelText="Assigned To"
-						value={this.state.ticketData.assignedto}
-					/>
-					<br/>
+						<TextField
+							floatingLabelText="Description"
+							value={this.state.ticketData.description}
+						/>
+						<br/>
+						<TextField
+							floatingLabelText="Priority"
+							value={this.state.ticketData.priority}
+						/>
+						<br/>
+						<TextField
+							floatingLabelText="Escalation"
+							value={this.state.ticketData.escalation}
+						/>
+						<br/>
+						<SelectField
+							floatingLabelText="Assigned To"
+							value={this.state.ticketData.assignedto}
+							style={styles.select}
+						/>
+
+					</div>
                 </Paper>
                 <Paper style={styles.rightCard}>
                     <h1>
-                        Ticket Comments
+                        Ticket Comments - {this.state.user}
                     </h1>
                     <div>
 						  <ChatFeed
