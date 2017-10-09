@@ -5,6 +5,7 @@ import Login from './Login'
 import Logout from './Logout'
 import Tickets from './AllTickets'
 import Ticket from './Ticket'
+import CreateTicket from "./CreateTicket";
 
 class Main extends Component {
 
@@ -22,6 +23,7 @@ class Main extends Component {
                 <Route exact path='/' component={Home}/>
                 <Route path="/viewAllTickets" component={Tickets}/>
                 <Route path="/ticket/:id" component={Ticket}/>
+                <Route path="/newTicket" component={CreateTicket}/>
             </Switch>
           </main>);
     }

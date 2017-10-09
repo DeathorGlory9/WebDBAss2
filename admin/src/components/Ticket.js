@@ -1,5 +1,5 @@
 import React from 'react'
-import {SelectField, TextField} from "material-ui";
+import {RaisedButton, SelectField, TextField} from "material-ui";
 import TinyMCE from 'react-tinymce';
 import { ChatFeed, Message } from 'react-chat-ui';
 import Paper from "material-ui/Paper";
@@ -17,14 +17,16 @@ const styles = {
         margin: 10,
         padding: 10,
 		textAlign: "Center",
-        verticalAlign: "top"
+        verticalAlign: "top",
+		height: 670
     },
     rightCard: {
         //float: 'right',
         display: "inline-block",
 		margin: 10,
 		padding: 10,
-		verticalAlign: "top"
+		verticalAlign: "top",
+        height: 670
     },
     column1: {
         position: "absolute",
@@ -36,7 +38,11 @@ const styles = {
 	},
 	div: {
     	textAlign: "center",
-		paddingTop: "5%"
+		paddingTop: 10
+	},
+	button : {
+		marginTop: 5,
+		marginBottom: 5
 	}
 }
 
@@ -180,7 +186,10 @@ export default class Ticket extends React.Component {
 							value={this.state.ticketData.assignedto}
 							style={styles.select}
 						/>
-
+						<br/>
+						<RaisedButton label="Resolve" primary={true} fullWidth={true} style={styles.button}></RaisedButton>
+						<br/>
+						<RaisedButton label="Unresolve" secondary={true} fullWidth={true} style={styles.button}></RaisedButton>
 					</div>
                 </Paper>
                 <Paper style={styles.rightCard}>
