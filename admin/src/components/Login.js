@@ -80,6 +80,20 @@ class Login extends React.Component {
         localStorage.setItem('User',type)
         localStorage.setItem('Name',this.state.user.displayName)
         localStorage.setItem('id',this.state.user.uid)
+        this.createUser();
+    }
+
+    //Creates user in laravel
+    createUser(){
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/techusers/create/' + this.state.user.uid + '/' + this.state.user.displayName;
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'multipart/form-data;',
+          }
+        });
     }
 
     handleSignout = () => {

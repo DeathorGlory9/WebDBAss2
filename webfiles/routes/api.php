@@ -40,4 +40,9 @@ Route::group(['middleware' => 'cors'], function () {
     Route::put('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
     //create ticket
     Route::post('tickets/create', 'TicketController@createTicket');
+
+    //get all tech users
+    Route::get('techusers/getAllTechUsers','TechUserController@getAllTechUsers');
+    //create ticket
+    Route::post('techusers/create/{id}/{name}', 'TechUserController@addTechUser');
 });
