@@ -48,15 +48,16 @@ export default class TicketPanel extends React.Component {
                 description: '',
                 priority: '',
                 escalation: '',
-                assignedto: {
-                    id: '',
-                    displayName: ''
-                },
+                assignedto: '',
 
             },
             messages : [],
             techUsers: {
                 id: '',
+            displayName:''
+        },
+        assignedTo: {
+            id: '',
             displayName:''
             }
         }
@@ -100,9 +101,28 @@ export default class TicketPanel extends React.Component {
 
             console.log(data);
             //this.setState({...this.state.ticketData, assignedto: this.state.ticketData.assignedto})
-
+            this.getAssignedUser();
         }.bind(this))
     }
+
+    //Retrieves ticket data
+    getAssignedUser()
+    {
+        //Api url
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/techusers/getTechUser/' + this.state.ticketData.assignedto;
+        var Ticket = {};
+
+        fetch(url, {
+            method: 'GET',
+        })
+        .then(function(response ) {
+            return response.json();
+        })
+        .then(function(data) {
+            this.setState({assignedTo: data[0]});
+        }.bind(this))
+    }
+
 
     getTechUsers()
     {
@@ -240,6 +260,7 @@ export default class TicketPanel extends React.Component {
 								<MenuItem value={3} key="3" primaryText="3"/>
 							</DropDownMenu>
                             <br/>
+                            <p  style={styles.p}>Assigned To: {this.state.assignedTo.displayName}</p>
 							<DropDownMenu
                                 name="assignedto"
 								value={this.state.ticketData.assignedto.id}
@@ -248,6 +269,7 @@ export default class TicketPanel extends React.Component {
 							>
                                 {assignedtoMenuItems}
 							</DropDownMenu>
+
 							<br/>
 							<RaisedButton label="Resolve" onClick={this.resolveTicket} primary={true} fullWidth={true} style={styles.button}/>
 							<br/>
