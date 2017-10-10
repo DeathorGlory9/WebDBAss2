@@ -5,33 +5,42 @@ import CommentPanel from "./CommentPanel";
 
 const styles = {
     leftCard: {
-		//float: 'left',
-		display: "inline-block",
+        //float: 'left',
+        display: "inline-block",
         margin: 10,
         padding: 10,
-		textAlign: "Center",
+        textAlign: "Center",
         verticalAlign: "top",
-		height: 670,
-		width: "30%"
+        height: 670,
+        width: "30%"
+    },
+    rightCard: {
+        //float: 'right',
+        display: "inline-block",
+        margin: 10,
+        padding: 10,
+        verticalAlign: "top",
+        height: 670,
+        width: "50%"
     },
     column1: {
         position: "absolute",
         display: "inline-block",
-		verticalAlign: "center",
-		textAlign: "center"
+        verticalAlign: "center",
+        textAlign: "center"
         //margin: "%",
         //padding: 10
-	},
-	div: {
-    	textAlign: "center",
-		paddingTop: 10,
-		width: "100%"
-	},
-	button : {
-		marginTop: 5,
-		marginBottom: 5
-	}
-}
+    },
+    div: {
+        textAlign: "center",
+        paddingTop: 10,
+        width: "100%"
+    },
+    button : {
+        marginTop: 5,
+        marginBottom: 5
+    }
+};
 
 const assignedtoMenuItems = [];
 
@@ -44,7 +53,7 @@ export default class Ticket extends React.Component {
             ticketData: {},
             messages : [],
 			techUsers: [],
-        };
+        }
 	}
 
     componentWillMount()
@@ -66,20 +75,17 @@ export default class Ticket extends React.Component {
         var Ticket = {};
         fetch(url, {
             method: 'GET',
-        })
-
-            .then(function(response ) {
-            return response.json();
+		})
+			.then(function(response ) {
+            	return response.json();
 			})
             .then(function(data) {
-                console.log(data);
+
                 Ticket = data[0];
-                console.log("DATA 0:", data[0]);
-                this.setState({ticketData: Ticket})
+
+                this.setState({ticketData: Ticket});
 
 			}.bind(this))
-
-
     }
 
     getTechUsers() {
@@ -96,16 +102,17 @@ export default class Ticket extends React.Component {
                 console.log(data);
                 TechUsers = data;
                 console.log("TECH:", data);
-                this.setState({techUsers: TechUsers})
+                this.setState({techUsers: TechUsers});
 
-				this.state.techUsers.forEach(function(User) {
-					assignedtoMenuItems.push(<MenuItem value={User} key={User} primaryText={User.displayName}/>);
-				})
+                this.state.techUsers.forEach(function(User) {
+                    assignedtoMenuItems.push(<MenuItem value={User} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
+                });
             }.bind(this))
+
 
     }
 
-    assignedtoChanged = (event, index, value) => {
+    assignedToChanged = (event, index, value) => {
 		this.setState({ticketData:{assignedto:value}});
 		var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/' + this.props.match.params.id + '/' + value;
 
@@ -116,9 +123,13 @@ export default class Ticket extends React.Component {
                 'Content-Type': 'multipart/form-data;',
             }
 		});
-	}
+	};
 
-    escalationChanged = (event, index, value) => this.setState({ticketData:{escalation:value}});
+    handleChange = (event, index, value) => {
+        var FieldName = event.target.name;
+        console.log("event.target.name:" + event.target.name + ", event.target.value:" + value);
+        this.setState({ticketData:{[FieldName]: value}});
+    };
 
     render() {
             return (
@@ -128,51 +139,69 @@ export default class Ticket extends React.Component {
                         <h2>{this.state.ticketData.issueTitle}</h2>
 						<h2>Status: {this.state.ticketData.status}</h2>
 					<div>
+						<form>
 							<TextField
-                            floatingLabelText="ID"
-							value={this.state.ticketData.id}
-                        	/>
-						<br/>
-                        <TextField
-                            floatingLabelText="Operating System"
-							value={this.state.ticketData.os}
-                        />
-                        <br/>
-						<TextField
-							floatingLabelText="Description"
-							value={this.state.ticketData.description}
-						/>
-						<br/>
-						<TextField
-							floatingLabelText="Priority"
-							value={this.state.ticketData.priority}
-						/>
-						<br/>
-						<SelectField
-							floatingLabelText="Escalation"
-							value={this.state.ticketData.escalation}
-							onChange={this.escalationChanged}
-						>
-							<MenuItem value="1" primaryText="1"/>
-							<MenuItem value="2" primaryText="2"/>
-							<MenuItem value="3" primaryText="3"/>
-						</SelectField>
-						<br/>
-						<SelectField
-							floatingLabelText="Assigned To"
-							value={this.state.ticketData.assignedto}
-							style={styles.select}
-							onChange={this.assignedtoChanged}
-						>
-							{assignedtoMenuItems}
-						</SelectField>
-						<br/>
-						<RaisedButton label="Resolve" primary={true} fullWidth={true} style={styles.button}></RaisedButton>
-						<br/>
-						<RaisedButton label="Unresolve" secondary={true} fullWidth={true} style={styles.button}></RaisedButton>
+								floatingLabelText="ID"
+								name="id"
+								floatingLabelFixed={true}
+								value={this.state.ticketData.id}
+								onChange={this.handleChange}
+							/>
+							<br/>
+							<TextField
+								floatingLabelText="Operating System"
+								name="os"
+								floatingLabelFixed={true}
+								value={this.state.ticketData.os}
+								onChange={this.handleChange}
+							/>
+							<br/>
+							<TextField
+								floatingLabelText="Description"
+								name="description"
+								floatingLabelFixed={true}
+								value={this.state.ticketData.description}
+								onChange={this.handleChange}
+							/>
+							<br/>
+							<TextField
+								floatingLabelText="Priority"
+								name="priority"
+								floatingLabelFixed={true}
+								value={this.state.ticketData.priority}
+								onChange={this.handleChange}
+							/>
+							<br/>
+							<SelectField
+								floatingLabelText="Escalation"
+								name="escalation"
+								value={this.state.ticketData.escalation}
+								onChange={this.handleChange}
+							>
+								<MenuItem value="1" key="1" primaryText="1"/>
+								<MenuItem value="2" key="2" primaryText="2"/>
+								<MenuItem value="3" key="3" primaryText="3"/>
+							</SelectField>
+							<br/>
+							<SelectField
+								floatingLabelText="Assigned To"
+								name="assignedto"
+								value={this.state.ticketData.assignedto}
+								style={styles.select}
+								onChange={this.assignedToChanged}
+							>
+                                {assignedtoMenuItems}
+							</SelectField>
+							<br/>
+							<RaisedButton label="Resolve" primary={true} fullWidth={true} style={styles.button}/>
+							<br/>
+							<RaisedButton label="Unresolve" secondary={true} fullWidth={true} style={styles.button}/>
+						</form>
 					</div>
                 </Paper>
+				<Paper style={styles.rightCard}>
                 <CommentPanel ticketID={this.props.match.params.id}/>
+				</Paper>
 			</div>
         )
     }

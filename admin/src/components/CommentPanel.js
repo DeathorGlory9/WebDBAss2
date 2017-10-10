@@ -6,35 +6,6 @@ import TinyMCE from 'react-tinymce';
 
 var commentValue = "";
 
-const styles = {
-    rightCard: {
-        //float: 'right',
-        display: "inline-block",
-		margin: 10,
-		padding: 10,
-		verticalAlign: "top",
-        height: 670,
-		width: "50%"
-    },
-    column1: {
-        position: "absolute",
-        display: "inline-block",
-		verticalAlign: "center",
-		textAlign: "center"
-        //margin: "%",
-        //padding: 10
-	},
-	div: {
-    	textAlign: "center",
-		paddingTop: 10,
-		width: "100%"
-	},
-	button : {
-		marginTop: 5,
-		marginBottom: 5
-	}
-}
-
 export default class CommentPanel extends React.Component {
     constructor(props) {
 		super();
@@ -109,12 +80,12 @@ export default class CommentPanel extends React.Component {
 
     handleEditorChange = (e) =>{
         commentValue = e.target.getContent();
-    }
+    };
 
     render()
     {
         return(
-            <Paper style={styles.rightCard}>
+<div>
                 <h1>
                     Ticket Comments - {this.state.user}
                 </h1>
@@ -153,7 +124,7 @@ export default class CommentPanel extends React.Component {
                   />
                   <button onClick={this.submitComment.bind(this)}>Submit Comment</button>
                 </div>
-            </Paper>
+</div>
         )
     }
 }
