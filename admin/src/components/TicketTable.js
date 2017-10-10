@@ -56,8 +56,11 @@ export class TicketTable extends React.Component {
     {
         if (this.state.tableData && this.state.tableData.length > 0)
         {
-            var id = this.state.tableData[this.state.selectedRows].id;
-            return "ticket/" + id
+            if (this.state.selectedRows.length > 0)
+            {
+                var id = this.state.tableData[this.state.selectedRows].id;
+                return "ticket/" + id
+            }
         }
 
         return '';
