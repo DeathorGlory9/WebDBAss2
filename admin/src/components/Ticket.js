@@ -108,6 +108,30 @@ export default class Ticket extends React.Component {
 
     }
 
+    resolveTicket =() => {
+		this.setState({ticketData:{status: 'Resolved'}});
+		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Resolved';
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data;',
+            }
+        });
+	}
+
+    unresolveTicket =() => {
+        this.setState({ticketData:{status: 'Unresolved'}});
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Unresolved';
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data;',
+            }
+        });
+    }
+
     assignedToChanged = (event, index, value) => {
 		this.setState({ticketData:{assignedto:value}});
 		var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/' + this.props.match.params.id + '/' + value.id;
@@ -189,9 +213,9 @@ export default class Ticket extends React.Component {
                                 {assignedtoMenuItems}
 							</SelectField>
 							<br/>
-							<RaisedButton label="Resolve" primary={true} fullWidth={true} style={styles.button}/>
+							<RaisedButton label="Resolve" onClick={this.resolveTicket} primary={true} fullWidth={true} style={styles.button}/>
 							<br/>
-							<RaisedButton label="Unresolve" secondary={true} fullWidth={true} style={styles.button}/>
+							<RaisedButton label="Unresolve" onClick={this.unresolveTicket} secondary={true} fullWidth={true} style={styles.button}/>
 						</form>
 					</div>
                 </Paper>
