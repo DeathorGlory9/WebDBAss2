@@ -9,6 +9,7 @@ use DB;
 
 class CommentController extends Controller
 {
+    // Stores a comment
     public function storeComment(Request $request)
 	{
 	     $this->validate($request, [

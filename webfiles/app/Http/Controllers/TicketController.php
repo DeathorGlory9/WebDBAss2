@@ -37,10 +37,9 @@ class TicketController extends Controller
 
     public function viewTicket($id)
     {
+        //Retrieves relevent ticket information
 		$ticket = DB::table('tickets')->where('id', $id)->first();
 		$user = DB::table('users')->where('id', $ticket->userid)->first();
-
-		//$comments = DB::table('comments')->where('ticketId', $id)->orderBy('created_at', 'ASC')->get();
         $comments = Ticket::find($id)->comments;
 
 
@@ -63,20 +62,20 @@ class TicketController extends Controller
 		return $tickets;
     }
 
-	 // Get all tickts that are assigned to a specific help desk user
-	 public function getAllTicketsAssigned(Request $request, $userId)
+    // Get all tickts that are assigned to a specific help desk user
+    public function getAllTicketsAssigned(Request $request, $userId)
     {
-		$tickets = DB::table('tickets')->where('assignedto', $userId)->get();
+        $tickets = DB::table('tickets')->where('assignedto', $userId)->get();
 
-		return $tickets;
+        return $tickets;
     }
 
-
-	 public function getTicket(Request $request, $id)
+    //Gets a ticket based on a specified id
+    public function getTicket(Request $request, $id)
     {
-		$tickets = DB::table('tickets')->where('id', $id)->get();
+        $tickets = DB::table('tickets')->where('id', $id)->get();
 
-		return $tickets;
+        return $tickets;
     }
 
     // Update a tickets status
@@ -123,6 +122,7 @@ class TicketController extends Controller
         }
 	}
 
+    // Assigns a ticket to a technical staff user
 	public function assignTicket(Request $request, $ticketId, $userId)
 	{
         try
@@ -137,6 +137,7 @@ class TicketController extends Controller
         }
 	}
 
+    // Creates a ticket
 	public function createTicket(Request $request)
     {
         try
@@ -165,6 +166,7 @@ class TicketController extends Controller
         //Ticket::create($ticket);
     }
 
+    // Returns a tickets comment
     public function getComments(Request $request, $ticketId)
     {
         $comments = Ticket::find($ticketId)->comments;

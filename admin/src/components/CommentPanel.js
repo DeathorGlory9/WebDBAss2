@@ -103,7 +103,7 @@ export default class CommentPanel extends React.Component {
          tmpMessage = (new Message({ id: 0, message: comment, senderName: author}));
          arrayvar.push(tmpMessage);
          this.setState({
-             messages: arrayvar
+             messages: arrayvar,
          });
     }
 
@@ -140,7 +140,8 @@ export default class CommentPanel extends React.Component {
                 </div>
                 <div>
                   <TinyMCE
-                     content=""
+                    ref = "commentEditor"
+                     content= ""
                      config={{
                         plugins: 'link image code',
                         toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code',

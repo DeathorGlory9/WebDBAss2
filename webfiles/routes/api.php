@@ -30,8 +30,6 @@ Route::group(['middleware' => 'cors'], function () {
     Route::put('tickets/priorityupdate/{id}/{priority}','TicketController@updateTicketPriority');
     //Update ticket escalation
     Route::put('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
-    //Add comment to ticket
-    Route::post('comments/add/{id}/{comment}/{author}','CommentController@addComment');
 	 //Get all ticket comments
     Route::get('comments/get/{ticketId}','TicketController@getComments');
     //get all tickets assigned to the user
@@ -40,7 +38,10 @@ Route::group(['middleware' => 'cors'], function () {
     Route::put('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
     //create ticket
     Route::post('tickets/create', 'TicketController@createTicket');
-
+    //Comment api
+    //Add comment to ticket
+    Route::post('comments/add/{id}/{comment}/{author}','CommentController@addComment');
+    //Tech user api
     //get all tech users
     Route::get('techusers/getAllTechUsers','TechUserController@getAllTechUsers');
     //get all tech users

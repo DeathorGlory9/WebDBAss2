@@ -19,6 +19,7 @@ class TechUserController extends Controller
 		return $techusers;
     }
 
+    // Returns tech user with the specified id
     public function getTechUsers(Request $request, $id)
     {
 		$techuser = DB::table('techusers')->where('id', $id)->get();
@@ -31,10 +32,12 @@ class TechUserController extends Controller
     {
         try
         {
+            //Checks if the user all ready exists
             $user = DB::table('tickets')->where('id', $id)->get();
-
+            //If new user
             if ($user->isEmpty())
             {
+                //Creates new tech user
                 $techuser =[
                     'id' => $id,
                     'displayName' => $name
