@@ -52,7 +52,7 @@ const HelpdeskHome = () => (
 	  <TicketTable/>
 	</Paper>
   </div>
-)
+);
 
 const TechnicalHome = () => (
 	<div>
@@ -61,4 +61,4 @@ const TechnicalHome = () => (
 			<TicketTable assignedTo={localStorage.getItem('id')}/>
 		</Paper>
 	</div>
-)
+);

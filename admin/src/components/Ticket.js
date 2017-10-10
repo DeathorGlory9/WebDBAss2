@@ -5,7 +5,6 @@ import CommentPanel from "./CommentPanel";
 
 const styles = {
     leftCard: {
-        //float: 'left',
         display: "inline-block",
         margin: 10,
         padding: 10,
@@ -15,7 +14,6 @@ const styles = {
         width: "30%"
     },
     rightCard: {
-        //float: 'right',
         display: "inline-block",
         margin: 10,
         padding: 10,
@@ -28,8 +26,6 @@ const styles = {
         display: "inline-block",
         verticalAlign: "center",
         textAlign: "center"
-        //margin: "%",
-        //padding: 10
     },
     div: {
         textAlign: "center",
@@ -114,10 +110,10 @@ export default class Ticket extends React.Component {
 
     assignedToChanged = (event, index, value) => {
 		this.setState({ticketData:{assignedto:value}});
-		var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/' + this.props.match.params.id + '/' + value;
+		var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/' + this.props.match.params.id + '/' + value.id;
 
 		fetch(url, {
-			method: 'POST',
+			method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'multipart/form-data;',
