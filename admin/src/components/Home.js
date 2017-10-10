@@ -14,8 +14,7 @@ const style = {
 
 export default class Home extends React.Component
 {
-
-
+	//If the user is logged in
 	componentWillMount()
 	{
 		if (!localStorage.getItem('User'))
@@ -25,8 +24,6 @@ export default class Home extends React.Component
 		}
 
 	}
-
-
 
 	render()
 	{

@@ -20,29 +20,31 @@ export default class CommentPanel extends React.Component {
 
     componentWillMount()
     {
+        //Gets the ticket data
         this.getCommentData();
     }
 
     getCommentData() {
-
+        //Api url
  		var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/get/' + this.props.ticketID;
 
 		var temp = [];
+        //Gets ticket data
 		fetch(url)
 			.then(response => response.json())
 			.then(json => {
 				var tmpMessage;
 				var arrayvar = this.state.messages.slice();
 				var i
-
+                //Creates a message to display for each comment
 				for(const ele in json)
 				{
-
+                    //Checks if the currently logged in user is the commenter
 					if (json[ele]['author'] == this.state.user)
 						{i = 0;}
 					else
 						{i = 1;}
-
+                    //Adds the message to an array
 					tmpMessage = (new Message({ id: i, message: json[ele]['comment'], senderName: json[ele]['author']}));
 					arrayvar.push(tmpMessage);
 				};
@@ -54,30 +56,36 @@ export default class CommentPanel extends React.Component {
 		   })
     }
 
+    //Adds a new comment
     submitComment(e)
     {
-         var author = localStorage.getItem('Name');
-         var comment =  commentValue.replace(/<[^>]*>/g, '');
-         comment = comment.replace(/[^a-zA-Z ]/g, "");
-         var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.ticketID + '/' + comment + '/' + author;
-
-         fetch(url, {
-           method: 'POST',
-           headers: {
+        //Gets the current users name
+        var author = localStorage.getItem('Name');
+        //Removes specical characters from the comment
+        var comment =  commentValue.replace(/<[^>]*>/g, '');
+        comment = comment.replace(/[^a-zA-Z ]/g, "");
+        //Api url
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/comments/add/' + this.props.ticketID + '/' + comment + '/' + author;
+        //Makes request
+        fetch(url, {
+            method: 'POST',
+            headers: {
                'Accept': 'application/json',
                'Content-Type': 'multipart/form-data;',
-           }
-         });
+        }
+        });
 
-         var tmpMessage;
-         var arrayvar = this.state.messages.slice();
-         tmpMessage = (new Message({ id: 0, message: comment, senderName: author}));
-         arrayvar.push(tmpMessage);
-         this.setState({
-             messages: arrayvar,
-         });
+        //Adds the message to the comment section
+        var tmpMessage;
+        var arrayvar = this.state.messages.slice();
+        tmpMessage = (new Message({ id: 0, message: comment, senderName: author}));
+        arrayvar.push(tmpMessage);
+        this.setState({
+            messages: arrayvar,
+        });
     }
 
+    //Submit comment listener
     handleEditorChange = (e) =>{
         commentValue = e.target.getContent();
     };
@@ -85,7 +93,7 @@ export default class CommentPanel extends React.Component {
     render()
     {
         return(
-<div>
+            <div>
                 <h1>
                     Ticket Comments - {this.state.user}
                 </h1>

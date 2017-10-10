@@ -80,22 +80,26 @@ export default class Ticket extends React.Component {
             this.props.history.push("/login");
             return ;
         }
-
+        //Retrieves ticket data
         this.getTicketData();
-
+        //Retrieves the assigned tech users data
 		this.getTechUsers();
 
     }
 
-	 getTicketData() {
-		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id ;
+    //Retrieves ticket data
+    getTicketData()
+    {
+        //Api url
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id ;
         var Ticket = {};
+
         fetch(url, {
             method: 'GET',
-		})
-		.then(function(response ) {
-        	return response.json();
-		})
+        })
+        .then(function(response ) {
+            return response.json();
+        })
         .then(function(data) {
 
             Ticket = data[0];
@@ -104,35 +108,37 @@ export default class Ticket extends React.Component {
             this.setState(function(prevState,props) {
                 return {ticketData: data[0]}
             });
+
             console.log(data);
             this.setState({...this.state.ticketData, assignedto: this.state.ticketData.assignedto})
-		}.bind(this))
+
+        }.bind(this))
     }
 
-    getTechUsers() {
+    getTechUsers()
+    {
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/techusers/getAllTechUsers';
         var TechUsers = [];
+
         fetch(url, {
             method: 'GET',
         })
+        .then(function(response ) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+            TechUsers = data;
+            console.log("TECH:", data);
+            this.setState({techUsers: TechUsers});
 
-            .then(function(response ) {
-                return response.json();
-            })
-            .then(function(data) {
-                console.log(data);
-                TechUsers = data;
-                console.log("TECH:", data);
-                this.setState({techUsers: TechUsers});
-
-                this.state.techUsers.forEach(function(User) {
-                    assignedtoMenuItems.push(<MenuItem value={User} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
-                });
-            }.bind(this))
-
-
+            this.state.techUsers.forEach(function(User) {
+                assignedtoMenuItems.push(<MenuItem value={User} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
+            });
+        }.bind(this))
     }
 
+    //Sets the current ticket status to resolved
     resolveTicket =() => {
         this.setState({ticketData:{...this.state.ticketData, status:'Resolved'}});
 		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Resolved';
@@ -145,6 +151,7 @@ export default class Ticket extends React.Component {
         });
 	}
 
+    //Sets the current tickts status to unresolved
     unresolveTicket =() => {
         this.setState({ticketData:{...this.state.ticketData, status:'Unresolved'}});
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Unresolved';
@@ -157,6 +164,7 @@ export default class Ticket extends React.Component {
         });
     }
 
+    //Changes ticket priority
     priorityChanged = (event, index, value) => {
         console.log("Before P", this.state.ticketData);
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/priorityupdate/' + this.props.match.params.id + '/' + value;
@@ -171,8 +179,9 @@ export default class Ticket extends React.Component {
         console.log("After P", this.state.ticketData);
 	};
 
+    //Changes tickets escalation level
     escalationChanged = (event, index, value) => {
-console.log("Before E", this.state.ticketData);
+        console.log("Before E", this.state.ticketData);
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/escalationupdate/' + this.props.match.params.id + '/' + value;
         fetch(url, {
             method: 'PUT',
@@ -185,6 +194,7 @@ console.log("Before E", this.state.ticketData);
         console.log("After E", this.state.ticketData);
 	};
 
+    //Sets who the ticket is assigned to
     assignedToChanged = (event, index, value) => {
         console.log("Before A", this.state.ticketData);
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/assignTicket/' + this.props.match.params.id + '/' + value.id;
