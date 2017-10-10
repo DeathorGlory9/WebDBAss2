@@ -1,8 +1,7 @@
 import React from 'react'
-import {MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
+import {DropDownMenu, MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
 import Paper from "material-ui/Paper";
 import CommentPanel from "./CommentPanel";
-import TicketSelect from "./TicketSelect";
 
 const styles = {
     leftCard: {
@@ -36,7 +35,11 @@ const styles = {
     button : {
         marginTop: 5,
         marginBottom: 5
+    },
+    select: {
+        width: "100%"
     }
+
 };
 
 const assignedtoMenuItems = [];
@@ -47,10 +50,25 @@ export default class Ticket extends React.Component {
 		super();
 		this.state = {
             user: localStorage.getItem('Name'),
-            ticketData: {},
+            ticketData: {
+                id: '',
+                issueTitle: '',
+                os: '',
+                status: '',
+                description: '',
+                priority: '',
+                escalation: '',
+                assignedto: {
+                    id: '',
+                    displayName: ''
+                },
+
+            },
             messages : [],
-			techUsers: [],
-            assignedTo: "none",
+			techUsers: {
+                id: '',
+            displayName:''
+            }
         }
 
 	}
@@ -83,8 +101,11 @@ export default class Ticket extends React.Component {
             Ticket = data[0];
 
             this.setState({ticketData: Ticket});
-
-            this.setState({assignedTo: this.state.ticketData.assignedto})
+            this.setState(function(prevState,props) {
+                return {ticketData: data[0]}
+            });
+            console.log(data);
+            this.setState({...this.state.ticketData, assignedto: this.state.ticketData.assignedto})
 		}.bind(this))
     }
 
@@ -113,7 +134,7 @@ export default class Ticket extends React.Component {
     }
 
     resolveTicket =() => {
-		this.setState({ticketData:{status: 'Resolved'}});
+        this.setState({ticketData:{...this.state.ticketData, status:'Resolved'}});
 		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Resolved';
         fetch(url, {
             method: 'PUT',
@@ -125,7 +146,7 @@ export default class Ticket extends React.Component {
 	}
 
     unresolveTicket =() => {
-        this.setState({ticketData:{status: 'Unresolved'}});
+        this.setState({ticketData:{...this.state.ticketData, status:'Unresolved'}});
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Unresolved';
         fetch(url, {
             method: 'PUT',
@@ -137,7 +158,7 @@ export default class Ticket extends React.Component {
     }
 
     priorityChanged = (event, index, value) => {
-		this.setState({ticketData:{priority:value}});
+        console.log("Before P", this.state.ticketData);
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/priorityupdate/' + this.props.match.params.id + '/' + value;
         fetch(url, {
             method: 'PUT',
@@ -146,10 +167,12 @@ export default class Ticket extends React.Component {
                 'Content-Type': 'multipart/form-data;',
             }
         });
+        this.setState({ticketData:{...this.state.ticketData, priority:value}});
+        console.log("After P", this.state.ticketData);
 	};
 
     escalationChanged = (event, index, value) => {
-		this.setState({ticketData:{escalation:value}});
+console.log("Before E", this.state.ticketData);
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/escalationupdate/' + this.props.match.params.id + '/' + value;
         fetch(url, {
             method: 'PUT',
@@ -158,10 +181,12 @@ export default class Ticket extends React.Component {
                 'Content-Type': 'multipart/form-data;',
             }
         });
+        this.setState({ticketData:{...this.state.ticketData, escalation:value}});
+        console.log("After E", this.state.ticketData);
 	};
 
     assignedToChanged = (event, index, value) => {
-		this.setState({ticketData:{assignedto:value}});
+        console.log("Before A", this.state.ticketData);
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/assignTicket/' + this.props.match.params.id + '/' + value.id;
         fetch(url, {
             method: 'PUT',
@@ -170,15 +195,18 @@ export default class Ticket extends React.Component {
                 'Content-Type': 'multipart/form-data;',
             }
         });
+        this.setState({ticketData:{...this.state.ticketData, assignedto:value}});
+        console.log("After A", this.state.ticketData);
 	};
 
     handleChange = (event, index, value) => {
-        var FieldName = event.target.name;
+        var fieldName = event.target.name;
         console.log("event.target.name:" + event.target.name + ", event.target.value:" + value);
-        this.setState({ticketData:{[FieldName]: value}});
+        this.setState({ticketData:{...this.state.ticketData,fieldName:value}});
     };
 
     render() {
+        console.log("STATE:", this.state)
             return (
 			<div style={styles.div}>
             	<Paper style={styles.leftCard}>
@@ -211,37 +239,36 @@ export default class Ticket extends React.Component {
 								onChange={this.handleChange}
 							/>
 							<br/>
-                            <SelectField
-                                floatingLabelText="Priority"
+                            <DropDownMenu
                                 name="priority"
                                 value={this.state.ticketData.priority}
+                                style={styles.select}
                                 onChange={this.priorityChanged}
                             >
                                 <MenuItem value="low" key="low" primaryText="Low"/>
                                 <MenuItem value="medium" key="medium" primaryText="Medium"/>
                                 <MenuItem value="high" key="high" primaryText="High"/>
-                            </SelectField>
+                            </DropDownMenu>
 							<br/>
-							<SelectField
-								floatingLabelText="Escalation"
-								name="escalation"
+							<DropDownMenu
+                                name="escalation"
 								value={this.state.ticketData.escalation}
-								onChange={this.escalationChanged}
+                                style={styles.select}
+                                onChange={this.escalationChanged}
 							>
 								<MenuItem value="1" key="1" primaryText="1"/>
 								<MenuItem value="2" key="2" primaryText="2"/>
 								<MenuItem value="3" key="3" primaryText="3"/>
-							</SelectField>
+							</DropDownMenu>
 							<br/>
-							<SelectField
-								floatingLabelText="Assigned To"
-								name="assignedto"
+							<DropDownMenu
+                                name="assignedto"
 								value={this.state.ticketData.assignedto}
-								style={styles.select}
+                                style={styles.select}
 								onChange={this.assignedToChanged}
 							>
                                 {assignedtoMenuItems}
-							</SelectField>
+							</DropDownMenu>
 							<br/>
 							<RaisedButton label="Resolve" onClick={this.resolveTicket} primary={true} fullWidth={true} style={styles.button}/>
 							<br/>

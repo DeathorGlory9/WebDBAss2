@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './Home'
 import Login from './Login'
 import Logout from './Logout'
-import Tickets from './AllTickets'
 import Ticket from './Ticket'
 import CreateTicket from "./CreateTicket";
 
@@ -21,7 +20,6 @@ class Main extends Component {
         	 	<Route path="/login" component={Login}/>
         		<Route path="/logout" component={Logout}/>
                 <Route exact path='/' component={Home}/>
-                <Route path="/viewAllTickets" component={Tickets}/>
                 <Route path="/ticket/:id" component={Ticket}/>
                 <Route path="/newTicket" component={CreateTicket}/>
             </Switch>

@@ -3,23 +3,6 @@ import {RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow
 
 const appTokenKey = "appToken";
 
-const style = {
-    paper: {
-      textAlign: "center",
-        align: "center"
-    },
-    button: {
-        margin: 10,
-        textAlign: 'right',
-        display: 'inline-block'
-    },
-    table: {
-        margin: 20,
-        width: "90%",
-        align: "center"
-    }
-}
-
 export class TicketTable extends React.Component {
 
     constructor(props) {
@@ -36,6 +19,7 @@ export class TicketTable extends React.Component {
     setTableData() {
         var temp = [];
 
+        //if the logged in user is tech
         if (this.props.assignedTo != null)
         {
             fetch('http://localhost/WebDBAss2/webfiles/public/api/comments/getAllTicketsAssigned/' + this.props.assignedTo)
@@ -59,6 +43,7 @@ export class TicketTable extends React.Component {
 
     componentWillMount()
     {
+        //Before component mounts, get table data
         this.setTableData();
     }
 
@@ -83,8 +68,6 @@ export class TicketTable extends React.Component {
         return (
         <div style={style.paper}>
             <RaisedButton style={style.button} label="View" href={'/' + this.getTicketID()}/>
-            <RaisedButton style={style.button} label="Assign"/>
-            <RaisedButton style={style.button} label="Delete"/>
 
             <Table style={style.table} onRowSelection={this.onRowSelection}>
                 <TableHeader>
@@ -116,3 +99,19 @@ export class TicketTable extends React.Component {
                 )
                 }
 }
+const style = {
+    paper: {
+        textAlign: "center",
+        align: "center"
+    },
+    button: {
+        margin: 10,
+        textAlign: 'right',
+        display: 'inline-block'
+    },
+    table: {
+        margin: 20,
+        width: "90%",
+        align: "center"
+    }
+};

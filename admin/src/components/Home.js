@@ -37,9 +37,11 @@ export default class Home extends React.Component
 function HomePage(props) {
     const userType = props.userType;
 
+    // If the user is a help desk user, show them table with all tickets
     if (userType == 'helpdesk') {
         return <HelpdeskHome/>;
     }
+    // If the user is a technical user, only show assigned tickets
     else {
         return <TechnicalHome/>;
     }
@@ -57,7 +59,7 @@ const HelpdeskHome = () => (
 const TechnicalHome = () => (
 	<div>
 		<Paper style={style.paper} zDepth={1}>
-			<span><h2>Technical - My Tickets</h2></span>
+			<span><h2>Welcome {localStorage.getItem('User')} - My Tickets</h2></span>
 			<TicketTable assignedTo={localStorage.getItem('id')}/>
 		</Paper>
 	</div>
