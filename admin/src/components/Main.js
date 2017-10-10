@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './Home'
 import Login from './Login'
 import Logout from './Logout'
-import Ticket from './Ticket'
+import TicketPage from './TicketPage'
 import CreateTicket from "./CreateTicket";
 
 class Main extends Component {
@@ -20,7 +20,7 @@ class Main extends Component {
         	 	<Route path="/login" component={Login}/>
         		<Route path="/logout" component={Logout}/>
                 <Route exact path='/' component={Home}/>
-                <Route path="/ticket/:id" component={Ticket}/>
+                <Route path="/ticket/:id" component={TicketPage}/>
                 <Route path="/newTicket" component={CreateTicket}/>
             </Switch>
           </main>);

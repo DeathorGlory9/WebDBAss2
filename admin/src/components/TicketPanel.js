@@ -1,26 +1,7 @@
 import React from 'react'
 import {DropDownMenu, MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
-import Paper from "material-ui/Paper";
-import CommentPanel from "./CommentPanel";
 
 const styles = {
-    leftCard: {
-        display: "inline-block",
-        margin: 10,
-        padding: 10,
-        textAlign: "Center",
-        verticalAlign: "top",
-        height: 670,
-        width: "30%"
-    },
-    rightCard: {
-        display: "inline-block",
-        margin: 10,
-        padding: 10,
-        verticalAlign: "top",
-        height: 670,
-        width: "50%"
-    },
     column1: {
         position: "absolute",
         display: "inline-block",
@@ -44,11 +25,11 @@ const styles = {
 
 const assignedtoMenuItems = [];
 
-export default class Ticket extends React.Component {
+export default class TicketPanel extends React.Component {
 
-	constructor() {
-		super();
-		this.state = {
+    constructor(props) {
+		super(props);
+        this.state = {
             user: localStorage.getItem('Name'),
             ticketData: {
                 id: '',
@@ -65,12 +46,16 @@ export default class Ticket extends React.Component {
 
             },
             messages : [],
-			techUsers: {
+            techUsers: {
                 id: '',
             displayName:''
             }
         }
 
+        //Retrieves ticket data
+        this.getTicketData();
+        //Retrieves the assigned tech users data
+        this.getTechUsers();
 	}
 
     componentWillMount()
@@ -80,18 +65,13 @@ export default class Ticket extends React.Component {
             this.props.history.push("/login");
             return ;
         }
-        //Retrieves ticket data
-        this.getTicketData();
-        //Retrieves the assigned tech users data
-		this.getTechUsers();
-
     }
 
     //Retrieves ticket data
     getTicketData()
     {
         //Api url
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.match.params.id ;
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/returnTicket/' + this.props.ticketID;
         var Ticket = {};
 
         fetch(url, {
@@ -141,7 +121,7 @@ export default class Ticket extends React.Component {
     //Sets the current ticket status to resolved
     resolveTicket =() => {
         this.setState({ticketData:{...this.state.ticketData, status:'Resolved'}});
-		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Resolved';
+		var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.ticketID + '/Resolved';
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -154,7 +134,7 @@ export default class Ticket extends React.Component {
     //Sets the current tickts status to unresolved
     unresolveTicket =() => {
         this.setState({ticketData:{...this.state.ticketData, status:'Unresolved'}});
-        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.match.params.id + '/Unresolved';
+        var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.ticketID + '/Unresolved';
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -167,7 +147,7 @@ export default class Ticket extends React.Component {
     //Changes ticket priority
     priorityChanged = (event, index, value) => {
         console.log("Before P", this.state.ticketData);
-        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/priorityupdate/' + this.props.match.params.id + '/' + value;
+        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/priorityupdate/' + this.props.ticketID + '/' + value;
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -182,7 +162,7 @@ export default class Ticket extends React.Component {
     //Changes tickets escalation level
     escalationChanged = (event, index, value) => {
         console.log("Before E", this.state.ticketData);
-        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/escalationupdate/' + this.props.match.params.id + '/' + value;
+        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/escalationupdate/' + this.props.ticketID + '/' + value;
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -197,7 +177,7 @@ export default class Ticket extends React.Component {
     //Sets who the ticket is assigned to
     assignedToChanged = (event, index, value) => {
         console.log("Before A", this.state.ticketData);
-        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/assignTicket/' + this.props.match.params.id + '/' + value.id;
+        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/assignTicket/' + this.props.ticketID + '/' + value.id;
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -218,12 +198,9 @@ export default class Ticket extends React.Component {
     render() {
         console.log("STATE:", this.state)
             return (
-			<div style={styles.div}>
-            	<Paper style={styles.leftCard}>
-
-                        <h2>{this.state.ticketData.issueTitle}</h2>
-						<h2>Status: {this.state.ticketData.status}</h2>
 					<div>
+                        <h2>{this.state.ticketData.issueTitle}</h2>
+                        <h2>Status: {this.state.ticketData.status}</h2>
 						<form>
 							<TextField
 								floatingLabelText="ID"
@@ -285,11 +262,6 @@ export default class Ticket extends React.Component {
 							<RaisedButton label="Unresolve" onClick={this.unresolveTicket} secondary={true} fullWidth={true} style={styles.button}/>
 						</form>
 					</div>
-                </Paper>
-				<Paper style={styles.rightCard}>
-                <CommentPanel ticketID={this.props.match.params.id}/>
-				</Paper>
-			</div>
         )
     }
 }
