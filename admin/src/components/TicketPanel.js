@@ -48,17 +48,19 @@ export default class TicketPanel extends React.Component {
                 description: '',
                 priority: '',
                 escalation: '',
-                assignedto: '',
-
+                assignedto: {
+                    id: '',
+                    displayName: ''
+               }
             },
             messages : [],
             techUsers: {
                 id: '',
-            displayName:''
-        },
-        assignedTo: {
-            id: '',
-            displayName:''
+                displayName:''
+            },
+            assignedTo: {
+                id: '',
+                displayName:''
             }
         }
 
@@ -99,15 +101,19 @@ export default class TicketPanel extends React.Component {
                 return {ticketData: data[0]}
             });
 
+
             console.log(data);
             //this.setState({...this.state.ticketData, assignedto: this.state.ticketData.assignedto})
             this.getAssignedUser();
+
         }.bind(this))
     }
 
     //Retrieves ticket data
     getAssignedUser()
     {
+        var id = this.state.ticketData.assignedto;
+        if( id ) {
         //Api url
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/techusers/getTechUser/' + this.state.ticketData.assignedto;
         var Ticket = {};
@@ -116,11 +122,13 @@ export default class TicketPanel extends React.Component {
             method: 'GET',
         })
         .then(function(response ) {
+
             return response.json();
         })
         .then(function(data) {
-            this.setState({assignedTo: data[0]});
+                this.setState({assignedTo: data[0]});
         }.bind(this))
+        }
     }
 
 
@@ -137,11 +145,11 @@ export default class TicketPanel extends React.Component {
         })
         .then(function(data) {
             TechUsers = data;
-            console.log("TECH:", data);
+
             this.setState({techUsers: TechUsers});
 
             this.state.techUsers.forEach(function(User) {
-                assignedtoMenuItems.push(<MenuItem value={User.id} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
+                 assignedtoMenuItems.push(<MenuItem value={User.id} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
             });
 
 
@@ -176,7 +184,7 @@ export default class TicketPanel extends React.Component {
 
     //Changes ticket priority
     priorityChanged = (event, index, value) => {
-        console.log("Before P", this.state.ticketData);
+
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/priorityupdate/' + this.props.ticketID + '/' + value;
         fetch(url, {
             method: 'PUT',
@@ -186,12 +194,12 @@ export default class TicketPanel extends React.Component {
             }
         });
         this.setState({ticketData:{...this.state.ticketData, priority:value}});
-        console.log("After P", this.state.ticketData);
+
 	};
 
     //Changes tickets escalation level
     escalationChanged = (event, index, value) => {
-        console.log("Before E", this.state.ticketData);
+
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/escalationupdate/' + this.props.ticketID + '/' + value;
         fetch(url, {
             method: 'PUT',
@@ -201,12 +209,12 @@ export default class TicketPanel extends React.Component {
             }
         });
         this.setState({ticketData:{...this.state.ticketData, escalation:value}});
-        console.log("After E", this.state.ticketData);
+
 	};
 
     //Sets who the ticket is assigned to
     assignedToChanged = (event, index, value) => {
-        console.log("Before A", this.state.ticketData);
+
         var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/assignTicket/' + this.props.ticketID + '/' + value.id;
         fetch(url, {
             method: 'PUT',
@@ -216,7 +224,7 @@ export default class TicketPanel extends React.Component {
             }
         });
         this.setState({ticketData:{...this.state.ticketData, assignedto:value}});
-        console.log("After A", this.state.ticketData);
+
 	};
 
     handleChange = (event, index, value) => {
@@ -226,9 +234,7 @@ export default class TicketPanel extends React.Component {
     };
 
     render() {
-        let name = this.state.ticketData.assignedto;
-        console.log(name)
-        console.log("STATE:", this.state)
+
             return (
 					<div>
                         <h2  style={styles.h2}>{this.state.ticketData.issueTitle}</h2>
