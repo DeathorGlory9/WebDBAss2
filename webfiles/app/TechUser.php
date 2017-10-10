@@ -14,4 +14,9 @@ class TechUser extends Model
     protected $fillable = [
         'id', 'displayName'
     ];
+
+    public function assignedto()
+    {
+        return $this->hasMany('App\Ticket');
+    }
 }
