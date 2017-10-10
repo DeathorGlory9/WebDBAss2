@@ -48,10 +48,7 @@ export default class TicketPanel extends React.Component {
                 description: '',
                 priority: '',
                 escalation: '',
-                assignedto: {
-                    id: '',
-                    displayName: ''
-                },
+                assignedto: '',
 
             },
             messages : [],
@@ -121,7 +118,7 @@ export default class TicketPanel extends React.Component {
             this.setState({techUsers: TechUsers});
 
             this.state.techUsers.forEach(function(User) {
-                assignedtoMenuItems.push(<MenuItem value={User.id} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
+                assignedtoMenuItems.push(<MenuItem value={User.id} label={User.id} key={User.id} primaryText={User.id}/>);
             });
 
 
@@ -206,8 +203,7 @@ export default class TicketPanel extends React.Component {
     };
 
     render() {
-        let name = this.state.ticketData.assignedto;
-        console.log(name)
+        console.log(this.state.ticketData.assignedto)
         console.log("STATE:", this.state)
             return (
 					<div>
@@ -242,7 +238,7 @@ export default class TicketPanel extends React.Component {
                             <br/>
 							<DropDownMenu
                                 name="assignedto"
-								value={this.state.ticketData.assignedto.id}
+								value={this.state.ticketData.assignedto}
                                 style={styles.select}
 								onChange={this.assignedToChanged}
 							>
