@@ -8,6 +8,14 @@ const styles = {
         verticalAlign: "center",
         textAlign: "center"
     },
+    h2: {
+        textAlign: "left",
+        paddingLeft: 20
+    },
+    p: {
+        textAlign: "left",
+        paddingLeft: 20
+    },
     div: {
         textAlign: "center",
         paddingTop: 10,
@@ -18,7 +26,8 @@ const styles = {
         marginBottom: 5
     },
     select: {
-        width: "100%"
+        width: "100%",
+        textAlign: "left"
     }
 
 };
@@ -199,32 +208,12 @@ export default class TicketPanel extends React.Component {
         console.log("STATE:", this.state)
             return (
 					<div>
-                        <h2>{this.state.ticketData.issueTitle}</h2>
-                        <h2>Status: {this.state.ticketData.status}</h2>
+                        <h2  style={styles.h2}>{this.state.ticketData.issueTitle}</h2>
+                        <h2  style={styles.h2}>Status: {this.state.ticketData.status}</h2>
 						<form>
-							<TextField
-								floatingLabelText="ID"
-								name="id"
-								floatingLabelFixed={true}
-								value={this.state.ticketData.id}
-								onChange={this.handleChange}
-							/>
-							<br/>
-							<TextField
-								floatingLabelText="Operating System"
-								name="os"
-								floatingLabelFixed={true}
-								value={this.state.ticketData.os}
-								onChange={this.handleChange}
-							/>
-							<br/>
-							<TextField
-								floatingLabelText="Description"
-								name="description"
-								floatingLabelFixed={true}
-								value={this.state.ticketData.description}
-								onChange={this.handleChange}
-							/>
+                            <p style={styles.p}>ID: {this.state.ticketData.id}</p>
+				            <p style={styles.p}>Operating System: {this.state.ticketData.os}</p>
+		                    <p style={styles.p}>Description:<br/> {this.state.ticketData.description}</p>
 							<br/>
                             <DropDownMenu
                                 name="priority"
