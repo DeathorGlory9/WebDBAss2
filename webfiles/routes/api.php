@@ -29,13 +29,13 @@ Route::group(['middleware' => 'cors'], function () {
     //Update ticket priority
     Route::put('tickets/priorityupdate/{id}/{priority}','TicketController@updateTicketPriority');
     //Update ticket escalation
-    Route::put('tickets/statusupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
+    Route::put('tickets/escalationupdate/{id}/{escalation}','TicketController@updateTicketEscalation');
+    //assign a ticket to a user
+    Route::put('tickets/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
 	 //Get all ticket comments
     Route::get('comments/get/{ticketId}','TicketController@getComments');
     //get all tickets assigned to the user
     Route::get('comments/getAllTicketsAssigned/{userId}','TicketController@getAllTicketsAssigned');
-    //assign a ticket to a user
-    Route::put('comments/assignTicket/{ticketId}/{userId}','TicketController@assignTicket');
     //create ticket
     Route::post('tickets/create', 'TicketController@createTicket');
     //Comment api
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'cors'], function () {
     //Tech user api
     //get all tech users
     Route::get('techusers/getAllTechUsers','TechUserController@getAllTechUsers');
-    //get all tech users
+    //get tech users
     Route::get('techusers/getTechUser/{id}','TechUserController@getTechUsers');
     //create ticket
     Route::post('techusers/create/{id}/{name}', 'TechUserController@addTechUser');

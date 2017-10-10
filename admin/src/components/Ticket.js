@@ -2,6 +2,7 @@ import React from 'react'
 import {MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
 import Paper from "material-ui/Paper";
 import CommentPanel from "./CommentPanel";
+import TicketSelect from "./TicketSelect";
 
 const styles = {
     leftCard: {
@@ -49,7 +50,9 @@ export default class Ticket extends React.Component {
             ticketData: {},
             messages : [],
 			techUsers: [],
+            assignedTo: "none",
         }
+
 	}
 
     componentWillMount()
@@ -72,16 +75,17 @@ export default class Ticket extends React.Component {
         fetch(url, {
             method: 'GET',
 		})
-			.then(function(response ) {
-            	return response.json();
-			})
-            .then(function(data) {
+		.then(function(response ) {
+        	return response.json();
+		})
+        .then(function(data) {
 
-                Ticket = data[0];
+            Ticket = data[0];
 
-                this.setState({ticketData: Ticket});
+            this.setState({ticketData: Ticket});
 
-			}.bind(this))
+            this.setState({assignedTo: this.state.ticketData.assignedto})
+		}.bind(this))
     }
 
     getTechUsers() {
@@ -132,17 +136,40 @@ export default class Ticket extends React.Component {
         });
     }
 
-    assignedToChanged = (event, index, value) => {
-		this.setState({ticketData:{assignedto:value}});
-		var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/' + this.props.match.params.id + '/' + value.id;
-
-		fetch(url, {
-			method: 'PUT',
+    priorityChanged = (event, index, value) => {
+		this.setState({ticketData:{priority:value}});
+        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/priorityupdate/' + this.props.match.params.id + '/' + value;
+        fetch(url, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'multipart/form-data;',
             }
-		});
+        });
+	};
+
+    escalationChanged = (event, index, value) => {
+		this.setState({ticketData:{escalation:value}});
+        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/escalationupdate/' + this.props.match.params.id + '/' + value;
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data;',
+            }
+        });
+	};
+
+    assignedToChanged = (event, index, value) => {
+		this.setState({ticketData:{assignedto:value}});
+        var url= 'http://localhost/WebDBAss2/webfiles/public/api/tickets/assignTicket/' + this.props.match.params.id + '/' + value.id;
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data;',
+            }
+        });
 	};
 
     handleChange = (event, index, value) => {
@@ -184,19 +211,22 @@ export default class Ticket extends React.Component {
 								onChange={this.handleChange}
 							/>
 							<br/>
-							<TextField
-								floatingLabelText="Priority"
-								name="priority"
-								floatingLabelFixed={true}
-								value={this.state.ticketData.priority}
-								onChange={this.handleChange}
-							/>
+                            <SelectField
+                                floatingLabelText="Priority"
+                                name="priority"
+                                value={this.state.ticketData.priority}
+                                onChange={this.priorityChanged}
+                            >
+                                <MenuItem value="low" key="low" primaryText="Low"/>
+                                <MenuItem value="medium" key="medium" primaryText="Medium"/>
+                                <MenuItem value="high" key="high" primaryText="High"/>
+                            </SelectField>
 							<br/>
 							<SelectField
 								floatingLabelText="Escalation"
 								name="escalation"
 								value={this.state.ticketData.escalation}
-								onChange={this.handleChange}
+								onChange={this.escalationChanged}
 							>
 								<MenuItem value="1" key="1" primaryText="1"/>
 								<MenuItem value="2" key="2" primaryText="2"/>

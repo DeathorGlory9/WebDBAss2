@@ -3,7 +3,6 @@
  */
 import React from 'react'
 import {MenuItem, RaisedButton, SelectField, TextField} from "material-ui";
-import TinyMCE from 'react-tinymce';
 import { ChatFeed, Message } from 'react-chat-ui';
 import Paper from "material-ui/Paper";
 import 'whatwg-fetch';
@@ -147,5 +146,3 @@ export default class CreateTicket extends React.Component {
         )
     }
 }
-
-
