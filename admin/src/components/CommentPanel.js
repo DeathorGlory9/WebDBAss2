@@ -3,8 +3,21 @@ import { ChatFeed, Message } from 'react-chat-ui';
 import 'whatwg-fetch';
 import Paper from "material-ui/Paper";
 import TinyMCE from 'react-tinymce';
+import {RaisedButton} from "material-ui";
 
 var commentValue = "";
+
+const styles = {
+    buttonDiv:{
+        float:"right",
+        marginTop: 15
+    },
+    chatBubbles:{
+        maxHeight: 350,
+        overflowY: "scroll"
+
+    }
+}
 
 export default class CommentPanel extends React.Component {
     constructor(props) {
@@ -97,7 +110,7 @@ export default class CommentPanel extends React.Component {
                 <h1>
                     Ticket Comments - {this.state.user}
                 </h1>
-                <div>
+                <div style={styles.chatBubbles}>
                       <ChatFeed
                          messages={this.state.messages} // Boolean: list of message objects
                          hasInputField={false} // Boolean: use our input, or use your own
@@ -130,7 +143,7 @@ export default class CommentPanel extends React.Component {
                      }}
                      onChange={this.handleEditorChange}
                   />
-                  <button onClick={this.submitComment.bind(this)}>Submit Comment</button>
+                  <RaisedButton label="Submit Comment" style={styles.buttonDiv} onClick={this.submitComment.bind(this)} primary={true}/>
                 </div>
 </div>
         )

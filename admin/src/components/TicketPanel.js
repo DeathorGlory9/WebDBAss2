@@ -124,6 +124,8 @@ export default class TicketPanel extends React.Component {
             this.state.techUsers.forEach(function(User) {
                 assignedtoMenuItems.push(<MenuItem value={User} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
             });
+
+            this.setState(this.state);
         }.bind(this))
     }
 
