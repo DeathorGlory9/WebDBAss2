@@ -72,7 +72,7 @@ export default class TicketPanel extends React.Component {
         if (!localStorage.getItem('User'))
         {
             this.props.history.push("/login");
-            return ;
+            return true;
         }
     }
 
@@ -99,7 +99,7 @@ export default class TicketPanel extends React.Component {
             });
 
             console.log(data);
-            this.setState({...this.state.ticketData, assignedto: this.state.ticketData.assignedto})
+            //this.setState({...this.state.ticketData, assignedto: this.state.ticketData.assignedto})
 
         }.bind(this))
     }
@@ -116,16 +116,15 @@ export default class TicketPanel extends React.Component {
             return response.json();
         })
         .then(function(data) {
-            console.log(data);
             TechUsers = data;
             console.log("TECH:", data);
             this.setState({techUsers: TechUsers});
 
             this.state.techUsers.forEach(function(User) {
-                assignedtoMenuItems.push(<MenuItem value={User} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
+                assignedtoMenuItems.push(<MenuItem value={User.id} label={User.displayName} key={User.id} primaryText={User.displayName}/>);
             });
 
-            this.setState(this.state);
+
         }.bind(this))
     }
 
@@ -142,7 +141,7 @@ export default class TicketPanel extends React.Component {
         });
 	}
 
-    //Sets the current tickts status to unresolved
+    //Sets the current tickets status to unresolved
     unresolveTicket =() => {
         this.setState({ticketData:{...this.state.ticketData, status:'Unresolved'}});
         var url = 'http://localhost/WebDBAss2/webfiles/public/api/tickets/statusupdate/'+ this.props.ticketID + '/Unresolved';
@@ -207,6 +206,8 @@ export default class TicketPanel extends React.Component {
     };
 
     render() {
+        let name = this.state.ticketData.assignedto;
+        console.log(name)
         console.log("STATE:", this.state)
             return (
 					<div>
@@ -234,14 +235,14 @@ export default class TicketPanel extends React.Component {
                                 style={styles.select}
                                 onChange={this.escalationChanged}
 							>
-								<MenuItem value="1" key="1" primaryText="1"/>
-								<MenuItem value="2" key="2" primaryText="2"/>
-								<MenuItem value="3" key="3" primaryText="3"/>
+								<MenuItem value={1} key="1" primaryText="1"/>
+								<MenuItem value={2} key="2" primaryText="2"/>
+								<MenuItem value={3} key="3" primaryText="3"/>
 							</DropDownMenu>
-							<br/>
+                            <br/>
 							<DropDownMenu
                                 name="assignedto"
-								value={this.state.ticketData.assignedto}
+								value={this.state.ticketData.assignedto.id}
                                 style={styles.select}
 								onChange={this.assignedToChanged}
 							>
